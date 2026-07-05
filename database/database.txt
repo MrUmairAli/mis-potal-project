@@ -1,0 +1,98 @@
+ use school;
+-- Drop table if it exists
+DROP TABLE IF EXISTS Students;
+
+-- Create Classes Table
+CREATE TABLE IF NOT EXISTS Classes (
+  ClassID INT PRIMARY KEY AUTO_INCREMENT,
+  ClassName VARCHAR(50) NOT NULL,
+  Section VARCHAR(10),
+  Year INT,
+  TotalStudents INT DEFAULT 0,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  
+  UNIQUE KEY unique_class_section (ClassName, Section)
+);
+
+-- Create Students Table
+CREATE TABLE Students (
+  RollNo INT PRIMARY KEY AUTO_INCREMENT,
+  StudentID INT UNIQUE NOT NULL,
+  ClassID INT NOT NULL,
+  Name VARCHAR(100) NOT NULL,
+  Gender ENUM('M', 'F', 'Other') NOT NULL,
+  DOB DATE NOT NULL,
+  StudentPhone VARCHAR(20),
+  ParentPhone VARCHAR(20) NOT NULL,
+  ParentEmail VARCHAR(100),
+  Address VARCHAR(255),
+  IsActive BOOLEAN DEFAULT TRUE,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  INDEX idx_classid (ClassID),
+  INDEX idx_name (Name),
+  INDEX idx_is_active (IsActive),
+  INDEX idx_studentid (StudentID),
+  
+  CONSTRAINT fk_students_classid FOREIGN KEY (ClassID) REFERENCES Classes(ClassID)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
+
+-- Sample Classes
+INSERT INTO Classes (ClassName, Section, Year) VALUES
+('Class 1', 'A', 2024),
+('Class 2', 'A', 2024),
+('Class 3', 'A', 2024),
+('Class 4', 'A', 2024),
+('Class 5', 'A', 2024),
+('Class 5', 'B', 2024),
+('Class 6', 'A', 2024),
+('Class 8', 'A', 2024);
+
+-- Sample Students
+INSERT INTO Students (StudentID, ClassID, Name, Gender, DOB, StudentPhone, ParentPhone, ParentEmail, Address, IsActive) VALUES
+(10001, 5, 'Ahmed Hassan', 'M', '2010-03-15', '03001234567', '03001234568', 'ahmed.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10002, 5, 'Fatima Khan', 'F', '2010-07-22', '03009876543', '03009876544', 'fatima.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10003, 5, 'Ali Raza', 'M', '2010-11-10', '03005555555', '03005555556', 'ali.parent@email.com', 'Rawalpindi, Pakistan', TRUE),
+(10004, 5, 'Zainab Malik', 'F', '2010-05-18', '03003333333', '03003333334', 'zainab.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10005, 5, 'Hassan Ali', 'M', '2010-09-25', '03007777777', '03007777778', 'hassan.parent@email.com', 'Peshawar, Pakistan', TRUE),
+(10006, 6, 'Usman Khan', 'M', '2009-02-14', '03004444444', '03004444445', 'usman.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10007, 6, 'Ayesha Ahmad', 'F', '2009-08-30', '03006666666', '03006666667', 'ayesha.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10008, 6, 'Muhammad Hasan', 'M', '2009-12-05', '03008888888', '03008888889', 'muhammad.parent@email.com', 'Lahore, Pakistan', TRUE),
+(10009, 8, 'Bilal Akram', 'M', '2007-06-20', '03002222222', '03002222223', 'bilal.parent@email.com', 'Islamabad, Pakistan', TRUE),
+(10010, 8, 'Nida Farooq', 'F', '2007-10-12', '03001111111', '03001111112', 'nida.parent@email.com', 'Islamabad, Pakistan', TRUE);
+
+
+
+--- some changes 
+use  school;
+alter table student drop column Rollno;
+alter table  students add column password varchar (20);
+select * from students;
+
+
+use school;
+-- =====================================================
+-- UPDATE Password Values for All Students
+-- =====================================================
+
+UPDATE students SET password = '10001@5' WHERE StudentID = 10001;
+UPDATE students SET password = '10002@5' WHERE StudentID = 10002;
+UPDATE students SET password = '10003@5' WHERE StudentID = 10003;
+UPDATE students SET password = '10004@5' WHERE StudentID = 10004;
+UPDATE students SET password = '10005@5' WHERE StudentID = 10005;
+UPDATE students SET password = '10006@6' WHERE StudentID = 10006;
+UPDATE students SET password = '10007@6' WHERE StudentID = 10007;
+UPDATE students SET password = '10008@6' WHERE StudentID = 10008;
+UPDATE students SET password = '10009@8' WHERE StudentID = 10009;
+UPDATE students SET password = '10010@8' WHERE StudentID = 10010;
+
+-- Verify with this query:
+-- SELECT StudentID, Name, ClassID, password FROM students;
+use school;
+alter table students add column Accstatus enum("blocked","unblocked") default "unblocked";
+alter table students add column Picpath varchar(255);
+alter table students add column ParentName varchar(50);	
+select * from students;
