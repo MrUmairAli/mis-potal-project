@@ -96,3 +96,489 @@ alter table students add column Accstatus enum("blocked","unblocked") default "u
 alter table students add column Picpath varchar(255);
 alter table students add column ParentName varchar(50);	
 select * from students;
+
+
+
+-- ATTENDANCE TABLE FOR SCHOOL MIS
+-- =====================================================
+
+DROP TABLE IF EXISTS Attendance;
+
+CREATE TABLE Attendance (
+  AttendanceID INT PRIMARY KEY AUTO_INCREMENT,
+  StudentID INT NOT NULL,
+  ClassID INT NOT NULL,
+  Date DATE NOT NULL,
+  Status ENUM('Present', 'Absent', 'Late', 'Leave') NOT NULL DEFAULT 'Absent',
+  Remarks VARCHAR(255),
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  -- Unique constraint: One attendance record per student per class per day
+  UNIQUE KEY unique_attendance (StudentID, ClassID, Date),
+  
+  -- Indexes for faster queries
+  INDEX idx_studentid (StudentID),
+  INDEX idx_classid (ClassID),
+  INDEX idx_date (Date),
+  INDEX idx_status (Status),
+  
+  -- Foreign keys
+  FOREIGN KEY (StudentID) REFERENCES students(StudentID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (ClassID) REFERENCES classes(ClassID) 
+    ON DELETE RESTRICT 
+    ON UPDATE CASCADE
+);
+
+-- =====================================================
+-- SAMPLE DATA FOR TESTING
+-- =====================================================
+
+-- February 2024 attendance for Class 5 (20 class days)
+INSERT INTO Attendance (StudentID, ClassID, Date, Status, Remarks) VALUES
+-- Student 10001 (Ahmed Hassan) - 18 present, 1 absent, 1 late
+(10001, 5, '2024-02-01', 'Present', NULL),
+(10001, 5, '2024-02-02', 'Present', NULL),
+(10001, 5, '2024-02-05', 'Absent', 'Medical leave'),
+(10001, 5, '2024-02-06', 'Present', NULL),
+(10001, 5, '2024-02-07', 'Present', NULL),
+(10001, 5, '2024-02-08', 'Present', NULL),
+(10001, 5, '2024-02-09', 'Present', NULL),
+(10001, 5, '2024-02-12', 'Present', NULL),
+(10001, 5, '2024-02-13', 'Present', NULL),
+(10001, 5, '2024-02-14', 'Late', NULL),
+(10001, 5, '2024-02-15', 'Present', NULL),
+(10001, 5, '2024-02-16', 'Present', NULL),
+(10001, 5, '2024-02-19', 'Present', NULL),
+(10001, 5, '2024-02-20', 'Present', NULL),
+(10001, 5, '2024-02-21', 'Present', NULL),
+(10001, 5, '2024-02-22', 'Present', NULL),
+(10001, 5, '2024-02-23', 'Present', NULL),
+(10001, 5, '2024-02-26', 'Present', NULL),
+(10001, 5, '2024-02-27', 'Present', NULL),
+(10001, 5, '2024-02-28', 'Present', NULL),
+
+-- Student 10002 (Fatima Khan) - 17 present, 2 absent, 1 leave
+(10002, 5, '2024-02-01', 'Present', NULL),
+(10002, 5, '2024-02-02', 'Present', NULL),
+(10002, 5, '2024-02-05', 'Present', NULL),
+(10002, 5, '2024-02-06', 'Absent', NULL),
+(10002, 5, '2024-02-07', 'Present', NULL),
+(10002, 5, '2024-02-08', 'Present', NULL),
+(10002, 5, '2024-02-09', 'Present', NULL),
+(10002, 5, '2024-02-12', 'Present', NULL),
+(10002, 5, '2024-02-13', 'Leave', 'Family emergency'),
+(10002, 5, '2024-02-14', 'Present', NULL),
+(10002, 5, '2024-02-15', 'Present', NULL),
+(10002, 5, '2024-02-16', 'Absent', NULL),
+(10002, 5, '2024-02-19', 'Present', NULL),
+(10002, 5, '2024-02-20', 'Present', NULL),
+(10002, 5, '2024-02-21', 'Present', NULL),
+(10002, 5, '2024-02-22', 'Present', NULL),
+(10002, 5, '2024-02-23', 'Present', NULL),
+(10002, 5, '2024-02-26', 'Present', NULL),
+(10002, 5, '2024-02-27', 'Present', NULL),
+(10002, 5, '2024-02-28', 'Present', NULL),
+
+-- Student 10003 (Ali Raza) - 15 present, 3 absent, 2 late
+(10003, 5, '2024-02-01', 'Present', NULL),
+(10003, 5, '2024-02-02', 'Absent', NULL),
+(10003, 5, '2024-02-05', 'Present', NULL),
+(10003, 5, '2024-02-06', 'Present', NULL),
+(10003, 5, '2024-02-07', 'Late', NULL),
+(10003, 5, '2024-02-08', 'Absent', NULL),
+(10003, 5, '2024-02-09', 'Present', NULL),
+(10003, 5, '2024-02-12', 'Present', NULL),
+(10003, 5, '2024-02-13', 'Present', NULL),
+(10003, 5, '2024-02-14', 'Present', NULL),
+(10003, 5, '2024-02-15', 'Absent', NULL),
+(10003, 5, '2024-02-16', 'Present', NULL),
+(10003, 5, '2024-02-19', 'Late', NULL),
+(10003, 5, '2024-02-20', 'Present', NULL),
+(10003, 5, '2024-02-21', 'Present', NULL),
+(10003, 5, '2024-02-22', 'Present', NULL),
+(10003, 5, '2024-02-23', 'Present', NULL),
+(10003, 5, '2024-02-26', 'Present', NULL),
+(10003, 5, '2024-02-27', 'Present', NULL),
+(10003, 5, '2024-02-28', 'Present', NULL),
+
+-- Student 10004 (Zainab Malik) - Class 5
+(10004, 5, '2024-02-01', 'Present', NULL),
+(10004, 5, '2024-02-02', 'Present', NULL),
+(10004, 5, '2024-02-05', 'Present', NULL),
+(10004, 5, '2024-02-06', 'Present', NULL),
+(10004, 5, '2024-02-07', 'Present', NULL),
+(10004, 5, '2024-02-08', 'Present', NULL),
+(10004, 5, '2024-02-09', 'Present', NULL),
+(10004, 5, '2024-02-12', 'Present', NULL),
+(10004, 5, '2024-02-13', 'Present', NULL),
+(10004, 5, '2024-02-14', 'Present', NULL),
+(10004, 5, '2024-02-15', 'Present', NULL),
+(10004, 5, '2024-02-16', 'Present', NULL),
+(10004, 5, '2024-02-19', 'Present', NULL),
+(10004, 5, '2024-02-20', 'Present', NULL),
+(10004, 5, '2024-02-21', 'Present', NULL),
+(10004, 5, '2024-02-22', 'Present', NULL),
+(10004, 5, '2024-02-23', 'Present', NULL),
+(10004, 5, '2024-02-26', 'Present', NULL),
+(10004, 5, '2024-02-27', 'Present', NULL),
+(10004, 5, '2024-02-28', 'Present', NULL),
+
+-- Student 10005 (Hassan Ali) - Class 5
+(10005, 5, '2024-02-01', 'Present', NULL),
+(10005, 5, '2024-02-02', 'Present', NULL),
+(10005, 5, '2024-02-05', 'Absent', 'Sick'),
+(10005, 5, '2024-02-06', 'Present', NULL),
+(10005, 5, '2024-02-07', 'Present', NULL),
+(10005, 5, '2024-02-08', 'Present', NULL),
+(10005, 5, '2024-02-09', 'Present', NULL),
+(10005, 5, '2024-02-12', 'Present', NULL),
+(10005, 5, '2024-02-13', 'Present', NULL),
+(10005, 5, '2024-02-14', 'Present', NULL),
+(10005, 5, '2024-02-15', 'Absent', 'Doctor appointment'),
+(10005, 5, '2024-02-16', 'Present', NULL),
+(10005, 5, '2024-02-19', 'Present', NULL),
+(10005, 5, '2024-02-20', 'Present', NULL),
+(10005, 5, '2024-02-21', 'Present', NULL),
+(10005, 5, '2024-02-22', 'Present', NULL),
+(10005, 5, '2024-02-23', 'Present', NULL),
+(10005, 5, '2024-02-26', 'Present', NULL),
+(10005, 5, '2024-02-27', 'Present', NULL),
+(10005, 5, '2024-02-28', 'Present', NULL)
+-- FEES TABLE FOR SCHOOL MIS
+-- =====================================================
+DROP TABLE IF EXISTS Fees;
+
+CREATE TABLE Fees (
+    FeeID INT PRIMARY KEY AUTO_INCREMENT,
+    StudentID INT NOT NULL,
+    ClassID INT NOT NULL,
+
+    Month INT NOT NULL,              -- 1-12, which billing month this fee is for
+    Year INT NOT NULL,               -- e.g. 2024
+
+    TuitionFee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    ExamFee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    TransportFee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+
+    TotalAmount DECIMAL(10,2)
+        GENERATED ALWAYS AS (TuitionFee + ExamFee + TransportFee) STORED,
+
+    Status ENUM('Paid', 'Unpaid', 'Cancelled') NOT NULL DEFAULT 'Unpaid',
+
+    DueDate DATE NOT NULL,
+    PaidDate DATE NULL,              -- set only when Status becomes 'Paid'
+    PaymentMethod ENUM('Cash', 'Bank Transfer', 'Card', 'Online', 'Cheque') NULL,
+    Remarks VARCHAR(255),
+
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    -- One fee record per student per month/year
+    UNIQUE KEY unique_fee (StudentID, Month, Year),
+
+    -- Indexes for faster queries
+    INDEX idx_studentid (StudentID),
+    INDEX idx_classid (ClassID),
+    INDEX idx_status (Status),
+    INDEX idx_duedate (DueDate),
+    INDEX idx_monthyear (Month, Year),
+
+    -- Foreign keys
+    FOREIGN KEY (StudentID) REFERENCES students(StudentID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (ClassID) REFERENCES classes(ClassID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+
+
+
+use school;
+-- =====================================================
+-- FEES TABLE TEST DATA
+-- Students 10001-10005, Class 5, Jan-June 2024
+-- =====================================================
+
+INSERT INTO Fees (StudentID, ClassID, Month, Year, TuitionFee, ExamFee, TransportFee, Status, DueDate, PaidDate, PaymentMethod, Remarks) VALUES
+
+-- ===== Student 10001 (Ahmed Hassan) =====
+(10001, 5, 1, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-01-10', '2024-01-08', 'Cash',          NULL),
+(10001, 5, 2, 2024, 5000.00, 1500.00, 1000.00, 'Paid', '2024-02-10', '2024-02-09', 'Bank Transfer', 'Mid-term exam fee included'),
+(10001, 5, 3, 2024, 5000.00, 0.00, 1000.00, 'Unpaid', '2024-03-10', NULL, NULL, NULL),
+(10001, 5, 4, 2024, 5000.00, 0.00, 1000.00, 'Unpaid', '2024-04-10', NULL, NULL, NULL),
+(10001, 5, 5, 2024, 5000.00, 0.00, 0.00,    'Cancelled', '2024-05-10', NULL, NULL, 'Transport paused this month'),
+(10001, 5, 6, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-06-10', '2024-06-05', 'Online', NULL),
+
+-- ===== Student 10002 (Fatima Khan) =====
+(10002, 5, 1, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-01-10', '2024-01-10', 'Cash', NULL),
+(10002, 5, 2, 2024, 4500.00, 1500.00, 0.00, 'Unpaid', '2024-02-10', NULL, NULL, NULL),
+(10002, 5, 3, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-03-10', '2024-03-07', 'Card', NULL),
+(10002, 5, 4, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-04-10', '2024-04-09', 'Cash', NULL),
+(10002, 5, 5, 2024, 4500.00, 0.00, 0.00,    'Unpaid', '2024-05-10', NULL, NULL, NULL),
+(10002, 5, 6, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-06-10', '2024-06-11', 'Bank Transfer', 'Paid one day late, no fine applied'),
+
+-- ===== Student 10003 (Ali Raza) =====
+(10003, 5, 1, 2024, 4800.00, 0.00, 1200.00, 'Paid',   '2024-01-10', '2024-01-09', 'Cash', NULL),
+(10003, 5, 2, 2024, 4800.00, 1500.00, 1200.00, 'Paid', '2024-02-10', '2024-02-10', 'Online', NULL),
+(10003, 5, 3, 2024, 4800.00, 0.00, 1200.00, 'Unpaid', '2024-03-10', NULL, NULL, 'Reminder sent'),
+(10003, 5, 4, 2024, 4800.00, 0.00, 1200.00, 'Unpaid', '2024-04-10', NULL, NULL, NULL),
+(10003, 5, 5, 2024, 4800.00, 0.00, 1200.00, 'Paid',   '2024-05-10', '2024-05-08', 'Cash', NULL),
+(10003, 5, 6, 2024, 4800.00, 0.00, 1200.00, 'Paid',   '2024-06-10', '2024-06-06', 'Card', NULL),
+
+-- ===== Student 10004 (Zainab Malik) =====
+(10004, 5, 1, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-01-10', '2024-01-10', 'Online', NULL),
+(10004, 5, 2, 2024, 5000.00, 1500.00, 1000.00, 'Paid', '2024-02-10', '2024-02-08', 'Cash', NULL),
+(10004, 5, 3, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-03-10', '2024-03-09', 'Bank Transfer', NULL),
+(10004, 5, 4, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-04-10', '2024-04-10', 'Cash', NULL),
+(10004, 5, 5, 2024, 5000.00, 0.00, 1000.00, 'Paid',   '2024-05-10', '2024-05-07', 'Card', NULL),
+(10004, 5, 6, 2024, 5000.00, 0.00, 1000.00, 'Unpaid', '2024-06-10', NULL, NULL, NULL),
+
+-- ===== Student 10005 (Hassan Ali) =====
+(10005, 5, 1, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-01-10', '2024-01-08', 'Cash', NULL),
+(10005, 5, 2, 2024, 4500.00, 1500.00, 0.00, 'Unpaid', '2024-02-10', NULL, NULL, NULL),
+(10005, 5, 3, 2024, 4500.00, 0.00, 0.00,    'Unpaid', '2024-03-10', NULL, NULL, NULL),
+(10005, 5, 4, 2024, 4500.00, 0.00, 0.00,    'Cancelled', '2024-04-10', NULL, NULL, 'Fee waiver approved'),
+(10005, 5, 5, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-05-10', '2024-05-06', 'Online', NULL),
+(10005, 5, 6, 2024, 4500.00, 0.00, 0.00,    'Paid',   '2024-06-10', '2024-06-04', 'Cash', NULL);
+
+
+use school;
+alter table Fees drop column PaymentMethod;
+select * from Fees;
+
+
+
+
+use school;
+-- =====================================================
+-- RESULTS TABLE - WITH SUBJECT NAME (NO SUBJECT ID)
+-- =====================================================
+
+DROP TABLE IF EXISTS Results;
+
+CREATE TABLE Results (
+  ResultID INT PRIMARY KEY AUTO_INCREMENT,
+  StudentID INT NOT NULL,
+  ClassID INT NOT NULL,
+  SubjectName VARCHAR(100) NOT NULL,
+  ExamCategory ENUM('MidTerm', 'FirstTerm', 'FinalTerm') NOT NULL,
+  Marks DECIMAL(5,2) NOT NULL,
+  Grade VARCHAR(2),
+  Remarks VARCHAR(255),
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  -- Unique: One result per student per subject per exam
+  UNIQUE KEY unique_result (StudentID, ClassID, SubjectName, ExamCategory),
+  
+  -- Indexes
+  INDEX idx_studentid (StudentID),
+  INDEX idx_classid (ClassID),
+  INDEX idx_subjectname (SubjectName),
+  INDEX idx_examcategory (ExamCategory),
+  INDEX idx_grade (Grade),
+  
+  -- Foreign Keys
+  FOREIGN KEY (StudentID) REFERENCES students(StudentID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (ClassID) REFERENCES classes(ClassID) 
+    ON DELETE RESTRICT 
+    ON UPDATE CASCADE
+);
+
+-- =====================================================
+-- INSERT SAMPLE RESULTS - MID TERM
+-- =====================================================
+
+-- Student 10001 (Ahmed Hassan) - MidTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10001, 5, 'English', 'MidTerm', 78),
+(10001, 5, 'Mathematics', 'MidTerm', 85),
+(10001, 5, 'Science', 'MidTerm', 72),
+(10001, 5, 'Social Studies', 'MidTerm', 80),
+(10001, 5, 'Urdu', 'MidTerm', 88),
+(10001, 5, 'Islamic Studies', 'MidTerm', 92);
+
+-- Student 10002 (Fatima Khan) - MidTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10002, 5, 'English', 'MidTerm', 75),
+(10002, 5, 'Mathematics', 'MidTerm', 68),
+(10002, 5, 'Science', 'MidTerm', 80),
+(10002, 5, 'Social Studies', 'MidTerm', 78),
+(10002, 5, 'Urdu', 'MidTerm', 85),
+(10002, 5, 'Islamic Studies', 'MidTerm', 90);
+
+-- Student 10003 (Ali Raza) - MidTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10003, 5, 'English', 'MidTerm', 65),
+(10003, 5, 'Mathematics', 'MidTerm', 58),
+(10003, 5, 'Science', 'MidTerm', 70),
+(10003, 5, 'Social Studies', 'MidTerm', 75),
+(10003, 5, 'Urdu', 'MidTerm', 80),
+(10003, 5, 'Islamic Studies', 'MidTerm', 88);
+
+-- Student 10004 (Zainab Malik) - MidTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10004, 5, 'English', 'MidTerm', 92),
+(10004, 5, 'Mathematics', 'MidTerm', 90),
+(10004, 5, 'Science', 'MidTerm', 88),
+(10004, 5, 'Social Studies', 'MidTerm', 89),
+(10004, 5, 'Urdu', 'MidTerm', 91),
+(10004, 5, 'Islamic Studies', 'MidTerm', 95);
+
+-- Student 10005 (Hassan Ali) - MidTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10005, 5, 'English', 'MidTerm', 70),
+(10005, 5, 'Mathematics', 'MidTerm', 72),
+(10005, 5, 'Science', 'MidTerm', 75),
+(10005, 5, 'Social Studies', 'MidTerm', 80),
+(10005, 5, 'Urdu', 'MidTerm', 82),
+(10005, 5, 'Islamic Studies', 'MidTerm', 85);
+
+-- =====================================================
+-- INSERT SAMPLE RESULTS - FIRST TERM
+-- =====================================================
+
+-- Student 10001 (Ahmed Hassan) - FirstTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10001, 5, 'English', 'FirstTerm', 82),
+(10001, 5, 'Mathematics', 'FirstTerm', 88),
+(10001, 5, 'Science', 'FirstTerm', 75),
+(10001, 5, 'Social Studies', 'FirstTerm', 82),
+(10001, 5, 'Urdu', 'FirstTerm', 90),
+(10001, 5, 'Islamic Studies', 'FirstTerm', 94);
+
+-- Student 10002 (Fatima Khan) - FirstTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10002, 5, 'English', 'FirstTerm', 78),
+(10002, 5, 'Mathematics', 'FirstTerm', 70),
+(10002, 5, 'Science', 'FirstTerm', 82),
+(10002, 5, 'Social Studies', 'FirstTerm', 80),
+(10002, 5, 'Urdu', 'FirstTerm', 87),
+(10002, 5, 'Islamic Studies', 'FirstTerm', 92);
+
+-- Student 10003 (Ali Raza) - FirstTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10003, 5, 'English', 'FirstTerm', 68),
+(10003, 5, 'Mathematics', 'FirstTerm', 60),
+(10003, 5, 'Science', 'FirstTerm', 72),
+(10003, 5, 'Social Studies', 'FirstTerm', 77),
+(10003, 5, 'Urdu', 'FirstTerm', 82),
+(10003, 5, 'Islamic Studies', 'FirstTerm', 90);
+
+-- Student 10004 (Zainab Malik) - FirstTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10004, 5, 'English', 'FirstTerm', 94),
+(10004, 5, 'Mathematics', 'FirstTerm', 92),
+(10004, 5, 'Science', 'FirstTerm', 90),
+(10004, 5, 'Social Studies', 'FirstTerm', 91),
+(10004, 5, 'Urdu', 'FirstTerm', 93),
+(10004, 5, 'Islamic Studies', 'FirstTerm', 96);
+
+-- Student 10005 (Hassan Ali) - FirstTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10005, 5, 'English', 'FirstTerm', 72),
+(10005, 5, 'Mathematics', 'FirstTerm', 74),
+(10005, 5, 'Science', 'FirstTerm', 77),
+(10005, 5, 'Social Studies', 'FirstTerm', 82),
+(10005, 5, 'Urdu', 'FirstTerm', 84),
+(10005, 5, 'Islamic Studies', 'FirstTerm', 87);
+
+-- =====================================================
+-- INSERT SAMPLE RESULTS - FINAL TERM
+-- =====================================================
+
+-- Student 10001 (Ahmed Hassan) - FinalTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10001, 5, 'English', 'FinalTerm', 85),
+(10001, 5, 'Mathematics', 'FinalTerm', 90),
+(10001, 5, 'Science', 'FinalTerm', 78),
+(10001, 5, 'Social Studies', 'FinalTerm', 84),
+(10001, 5, 'Urdu', 'FinalTerm', 92),
+(10001, 5, 'Islamic Studies', 'FinalTerm', 95);
+
+-- Student 10002 (Fatima Khan) - FinalTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10002, 5, 'English', 'FinalTerm', 82),
+(10002, 5, 'Mathematics', 'FinalTerm', 72),
+(10002, 5, 'Science', 'FinalTerm', 85),
+(10002, 5, 'Social Studies', 'FinalTerm', 83),
+(10002, 5, 'Urdu', 'FinalTerm', 89),
+(10002, 5, 'Islamic Studies', 'FinalTerm', 94);
+
+-- Student 10003 (Ali Raza) - FinalTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10003, 5, 'English', 'FinalTerm', 72),
+(10003, 5, 'Mathematics', 'FinalTerm', 65),
+(10003, 5, 'Science', 'FinalTerm', 75),
+(10003, 5, 'Social Studies', 'FinalTerm', 80),
+(10003, 5, 'Urdu', 'FinalTerm', 85),
+(10003, 5, 'Islamic Studies', 'FinalTerm', 92);
+
+-- Student 10004 (Zainab Malik) - FinalTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10004, 5, 'English', 'FinalTerm', 96),
+(10004, 5, 'Mathematics', 'FinalTerm', 94),
+(10004, 5, 'Science', 'FinalTerm', 92),
+(10004, 5, 'Social Studies', 'FinalTerm', 93),
+(10004, 5, 'Urdu', 'FinalTerm', 95),
+(10004, 5, 'Islamic Studies', 'FinalTerm', 97);
+
+-- Student 10005 (Hassan Ali) - FinalTerm
+INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
+(10005, 5, 'English', 'FinalTerm', 75),
+(10005, 5, 'Mathematics', 'FinalTerm', 77),
+(10005, 5, 'Science', 'FinalTerm', 80),
+(10005, 5, 'Social Studies', 'FinalTerm', 85),
+(10005, 5, 'Urdu', 'FinalTerm', 87),
+(10005, 5, 'Islamic Studies', 'FinalTerm', 90);
+
+-- =====================================================
+-- GRADE ASSIGNMENT FUNCTION
+-- =====================================================
+
+DELIMITER $$
+
+CREATE FUNCTION GetGrade(marks DECIMAL(5,2)) 
+RETURNS VARCHAR(2)
+DETERMINISTIC
+BEGIN
+  IF marks >= 90 THEN
+    RETURN 'A+';
+  ELSEIF marks >= 85 THEN
+    RETURN 'A';
+  ELSEIF marks >= 80 THEN
+    RETURN 'A-';
+  ELSEIF marks >= 75 THEN
+    RETURN 'B+';
+  ELSEIF marks >= 70 THEN
+    RETURN 'B';
+  ELSEIF marks >= 65 THEN
+    RETURN 'B-';
+  ELSEIF marks >= 60 THEN
+    RETURN 'C+';
+  ELSEIF marks >= 55 THEN
+    RETURN 'C';
+  ELSEIF marks >= 50 THEN
+    RETURN 'C-';
+  ELSEIF marks >= 40 THEN
+    RETURN 'D';
+  ELSE
+    RETURN 'F';
+  END IF;
+END$$
+
+DELIMITER ;
+
+-- =====================================================
+-- UPDATE GRADES
+-- =====================================================
+
+UPDATE Results SET Grade = GetGrade(Marks) WHERE Grade IS NULL;
+select * from Results;

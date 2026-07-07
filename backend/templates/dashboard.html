@@ -182,8 +182,8 @@
             padding: 30px;
             border-radius: 12px;
             width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
+            max-width: 800px;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
@@ -268,6 +268,256 @@
             text-align: center;
         }
 
+        .success-banner {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5568d3;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn-change {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .btn-change:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .view-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background-color: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .view-btn:hover {
+            border-color: #667eea;
+        }
+
+        .month-year-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .attendance-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: default;
+            border: 1px solid #ddd;
+        }
+
+        .calendar-day.present {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+
+        .calendar-day.absent {
+            background-color: #f44336;
+            color: white;
+            border-color: #da190b;
+        }
+
+        .calendar-day.late {
+            background-color: #ff9800;
+            color: white;
+            border-color: #e68900;
+        }
+
+        .calendar-day.leave {
+            background-color: #9c27b0;
+            color: white;
+            border-color: #7b1fa2;
+        }
+
+        .calendar-day.holiday {
+            background-color: #e0e0e0;
+            color: #666;
+            border-color: #bdbdbd;
+        }
+
+        .calendar-day.empty {
+            background-color: white;
+            border-color: #f0f0f0;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header-day {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-box .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .stat-box .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .term-section {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .term-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .student-info {
                 flex-direction: column;
@@ -287,6 +537,14 @@
                 flex-direction: column;
                 gap: 15px;
             }
+
+            .month-year-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
         }
     </style>
 </head>
@@ -297,9 +555,8 @@
     </div>
 
     <div class="container">
-        <div id="errorBanner"></div>
+        <div id="messageBanner"></div>
 
-        <!-- Student Info Section -->
         <div class="student-info" id="studentInfo">
             <img src="" alt="Student Photo" class="student-photo" id="studentPhoto">
             <div class="student-details">
@@ -347,12 +604,11 @@
             </div>
         </div>
 
-        <!-- Dashboard Boxes -->
         <div class="dashboard-boxes">
             <div class="box box-info" onclick="openModal('info')">
                 <div class="box-icon">👤</div>
                 <h3>Student Info</h3>
-                <p>View detailed information</p>
+                <p>View & edit your information</p>
             </div>
 
             <div class="box box-attendance" onclick="openModal('attendance')">
@@ -375,33 +631,120 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Student Information</h2>
-                <button class="close-btn" onclick="closeModal('info')">&times;</button>
-            </div>
-            <div id="infoContent" class="loading">
-                <div class="loading-spinner"></div>
-                Loading...
-            </div>
-        </div>
-    </div>
-
+    <!-- Attendance Modal -->
     <div id="attendanceModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Attendance Records</h2>
                 <button class="close-btn" onclick="closeModal('attendance')">&times;</button>
             </div>
-            <div id="attendanceContent" class="loading">
-                <div class="loading-spinner"></div>
-                Loading...
+
+            <div class="view-selector">
+                <button class="view-btn active" onclick="switchView('daily')">Daily View</button>
+                <button class="view-btn" onclick="switchView('monthly')">Monthly View</button>
+            </div>
+
+            <div id="dailyView">
+                <div class="form-group">
+                    <label for="dailyDate">Select Date</label>
+                    <input type="date" id="dailyDate" onchange="loadDailyAttendance()">
+                </div>
+                <div id="dailyContent" class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading...
+                </div>
+            </div>
+
+            <div id="monthlyView" class="hidden">
+                <div class="month-year-selector">
+                    <div class="form-group">
+                        <label for="attendanceMonth">Month</label>
+                        <select id="attendanceMonth" onchange="loadMonthlyAttendance()">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="attendanceYear">Year</label>
+                        <input type="number" id="attendanceYear" min="2020" max="2099" onchange="loadMonthlyAttendance()">
+                    </div>
+                </div>
+
+                <div id="monthlyContent"></div>
             </div>
         </div>
     </div>
 
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Student Information</h2>
+                <button class="close-btn" onclick="closeModal('info')">&times;</button>
+            </div>
+
+            <div id="infoViewMode">
+                <table class="table" id="infoTable"></table>
+                <button class="btn btn-change" onclick="switchToEditMode()">Change Information</button>
+            </div>
+
+            <div id="infoEditMode" class="hidden">
+                <form id="editForm" onsubmit="submitChanges(event)">
+                    <div class="form-group">
+                        <label for="editDOB">Date of Birth</label>
+                        <input type="date" id="editDOB" name="dob" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editGender">Gender</label>
+                        <select id="editGender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editStudentPhone">Student Phone</label>
+                        <input type="tel" id="editStudentPhone" name="StudentPhone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editParentPhone">Parent Phone</label>
+                        <input type="tel" id="editParentPhone" name="Parentphone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editAddress">Address</label>
+                        <textarea id="editAddress" name="Address" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editParentEmail">Parent Email</label>
+                        <input type="email" id="editParentEmail" name="ParentEmail" required>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="switchToViewMode()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fees Modal -->
     <div id="feesModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -415,25 +758,50 @@
         </div>
     </div>
 
+    <!-- Results Modal -->
     <div id="resultsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Exam Results</h2>
                 <button class="close-btn" onclick="closeModal('results')">&times;</button>
             </div>
-            <div id="resultsContent" class="loading">
-                <div class="loading-spinner"></div>
-                Loading...
+
+            <div id="resultsSelector">
+                <div class="form-group">
+                    <label for="resultType">What would you like to view?</label>
+                    <select id="resultType" onchange="onResultTypeChange()">
+                        <option value="FirstTerm">First Term Result</option>
+                        <option value="MidTerm">Mid Term Result</option>
+                        <option value="FinalTerm">Final Term Result</option>
+                        <option value="CompleteYear">Complete Year Result (All 3 Terms)</option>
+                        <option value="Subject">Specific Subject Result</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resultClassID">Class</label>
+                    <input type="number" id="resultClassID" placeholder="e.g. 5" min="1" required>
+                </div>
+
+                <div class="form-group hidden" id="subjectNameGroup">
+                    <label for="resultSubject">Subject Name</label>
+                    <input type="text" id="resultSubject" placeholder="e.g. Mathematics">
+                </div>
+
+                <button class="btn btn-primary" onclick="fetchResults()">View Results</button>
             </div>
+
+            <div id="resultsContent" style="margin-top: 20px;"></div>
         </div>
     </div>
 
     <script>
         let currentStudent = null;
+        let currentView = 'daily';
 
-        // Load student data on page load, straight from the session
         window.addEventListener('load', async () => {
             await loadStudentInfo();
+            initAttendanceDates();
         });
 
         async function loadStudentInfo() {
@@ -445,12 +813,11 @@
                     currentStudent = data.student;
                     renderStudentInfo(currentStudent);
                 } else {
-                    // Not logged in, or session expired -> back to login
                     window.location.href = '/';
                 }
             } catch (error) {
                 console.error('Error loading student info:', error);
-                showError('Could not reach the server. Please try again.');
+                showMessage('Could not reach the server. Please try again.', 'error');
             }
         }
 
@@ -467,9 +834,13 @@
             document.getElementById('studentStatus').textContent = student.IsActive ? 'Active' : 'Inactive';
         }
 
-        function showError(message) {
-            document.getElementById('errorBanner').innerHTML =
-                `<div class="error-banner">${message}</div>`;
+        function showMessage(message, type = 'info') {
+            const banner = document.getElementById('messageBanner');
+            const className = type === 'error' ? 'error-banner' : 'success-banner';
+            banner.innerHTML = `<div class="${className}">${message}</div>`;
+            setTimeout(() => {
+                banner.innerHTML = '';
+            }, 3000);
         }
 
         function openModal(type) {
@@ -479,21 +850,215 @@
             if (type === 'info') {
                 loadInfoContent();
             } else if (type === 'attendance') {
-                loadAttendanceContent();
+                // Attendance will load on view switch
             } else if (type === 'fees') {
                 loadFeesContent();
             } else if (type === 'results') {
-                loadResultsContent();
+                resetResultsSelector();
             }
         }
 
         function closeModal(type) {
             const modalId = type + 'Modal';
             document.getElementById(modalId).style.display = 'none';
+            switchToViewMode();
+        }
+
+        function initAttendanceDates() {
+            const today = new Date();
+            document.getElementById('dailyDate').valueAsDate = today;
+            document.getElementById('attendanceMonth').value = today.getMonth() + 1;
+            document.getElementById('attendanceYear').value = today.getFullYear();
+        }
+
+        function switchView(view) {
+            currentView = view;
+            const dailyView = document.getElementById('dailyView');
+            const monthlyView = document.getElementById('monthlyView');
+            const buttons = document.querySelectorAll('.view-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (view === 'daily') {
+                dailyView.classList.remove('hidden');
+                monthlyView.classList.add('hidden');
+                buttons[0].classList.add('active');
+                loadDailyAttendance();
+            } else {
+                dailyView.classList.add('hidden');
+                monthlyView.classList.remove('hidden');
+                buttons[1].classList.add('active');
+                loadMonthlyAttendance();
+            }
+        }
+
+        async function loadDailyAttendance() {
+            const dateInput = document.getElementById('dailyDate').value;
+            const content = document.getElementById('dailyContent');
+
+            if (!dateInput) {
+                content.innerHTML = '<p style="color: #f44336;">Please select a date</p>';
+                return;
+            }
+
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const [year, month, day] = dateInput.split('-');
+                const response = await fetch(`/attendance?month=${month}&year=${year}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    const record = data.attendance.find(a => a.Date === dateInput);
+
+                    if (record) {
+                        const statusColor = record.Status === 'Present' ? 'green' :
+                                          record.Status === 'Absent' ? 'red' :
+                                          record.Status === 'Late' ? 'orange' : 'purple';
+
+                        content.innerHTML = `
+                            <div style="padding: 20px; background-color: #f9f9f9; border-radius: 8px; text-align: center;">
+                                <h3 style="margin-bottom: 15px;">Attendance for ${dateInput}</h3>
+                                <div style="font-size: 48px; margin-bottom: 10px;">
+                                    ${record.Status === 'Present' ? '✓' : record.Status === 'Absent' ? '✗' : record.Status === 'Late' ? '⏱' : '⊘'}
+                                </div>
+                                <p style="font-size: 24px; color: ${statusColor}; font-weight: 600; margin-bottom: 10px;">${record.Status}</p>
+                                ${record.Remarks ? `<p style="color: #666;">Remarks: ${record.Remarks}</p>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        content.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No attendance record for this date (Holiday)</p>';
+                    }
+                } else {
+                    content.innerHTML = '<p style="color: #f44336;">Error loading attendance</p>';
+                }
+            } catch (error) {
+                content.innerHTML = `<p style="color: #f44336;">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function loadMonthlyAttendance() {
+            const month = document.getElementById('attendanceMonth').value;
+            const year = document.getElementById('attendanceYear').value;
+            const content = document.getElementById('monthlyContent');
+
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch(`/attendance?month=${month}&year=${year}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    renderCalendar(data.attendance, parseInt(month), parseInt(year));
+                } else {
+                    content.innerHTML = '<p style="color: #f44336;">Error loading attendance</p>';
+                }
+            } catch (error) {
+                content.innerHTML = `<p style="color: #f44336;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderCalendar(attendance, month, year) {
+            const content = document.getElementById('monthlyContent');
+            const firstDay = new Date(year, month - 1, 1);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const attendanceMap = {};
+            attendance.forEach(record => {
+                attendanceMap[record.Date] = record.Status;
+            });
+
+            let html = '<div class="calendar-header">';
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                html += `<div class="calendar-header-day">${day}</div>`;
+            });
+            html += '</div>';
+
+            html += '<div class="attendance-calendar">';
+            let currentDate = new Date(startDate);
+            let stats = { present: 0, absent: 0, late: 0, leave: 0, holidays: 0 };
+
+            for (let i = 0; i < 42; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const status = attendanceMap[dateStr];
+                let className = 'calendar-day';
+                let displayText = currentDate.getDate();
+
+                if (currentDate.getMonth() + 1 !== month) {
+                    className += ' empty';
+                } else if (!status) {
+                    className += ' holiday';
+                    stats.holidays++;
+                } else {
+                    className += ' ' + status.toLowerCase();
+                    if (status === 'Present') stats.present++;
+                    else if (status === 'Absent') stats.absent++;
+                    else if (status === 'Late') stats.late++;
+                    else if (status === 'Leave') stats.leave++;
+                }
+
+                html += `<div class="${className}" title="${status || 'Holiday'}">${displayText}</div>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            html += '</div>';
+
+            html += `
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #4CAF50;"></div>
+                        <span>Present</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #f44336;"></div>
+                        <span>Absent</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ff9800;"></div>
+                        <span>Late</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #9c27b0;"></div>
+                        <span>Leave</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #e0e0e0;"></div>
+                        <span>Holiday</span>
+                    </div>
+                </div>
+            `;
+
+            const totalClass = stats.present + stats.absent + stats.late + stats.leave;
+            const percent = totalClass > 0 ? Math.round((stats.present + stats.late) / totalClass * 100) : 0;
+
+            html += `
+                <div class="attendance-summary">
+                    <div class="stat-box">
+                        <div class="stat-number">${stats.present}</div>
+                        <div class="stat-label">Present</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${stats.absent}</div>
+                        <div class="stat-label">Absent</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${stats.late}</div>
+                        <div class="stat-label">Late</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${percent}%</div>
+                        <div class="stat-label">Attendance %</div>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = html;
         }
 
         function loadInfoContent() {
-            const content = document.getElementById('infoContent');
+            const content = document.getElementById('infoTable');
 
             if (!currentStudent) {
                 content.innerHTML = '<p style="color: red;">No student data loaded</p>';
@@ -502,59 +1067,404 @@
 
             const student = currentStudent;
             content.innerHTML = `
-                <table class="table">
-                    <tr>
-                        <td><strong>Student ID</strong></td>
-                        <td>${student.StudentID}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Name</strong></td>
-                        <td>${student.Name}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Parent Name</strong></td>
-                        <td>${student.ParentName || 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Class</strong></td>
-                        <td>${student.ClassID}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Gender</strong></td>
-                        <td>${student.Gender}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Date of Birth</strong></td>
-                        <td>${student.DOB}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Student Phone</strong></td>
-                        <td>${student.StudentPhone || 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Parent Phone</strong></td>
-                        <td>${student.ParentPhone || 'N/A'}</td>
-                    </tr>
-                </table>
+                <tr>
+                    <td><strong>Student ID</strong></td>
+                    <td>${student.StudentID}</td>
+                </tr>
+                <tr>
+                    <td><strong>Name</strong></td>
+                    <td>${student.Name}</td>
+                </tr>
+                <tr>
+                    <td><strong>Parent Name</strong></td>
+                    <td>${student.ParentName || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <td><strong>Class</strong></td>
+                    <td>${student.ClassID}</td>
+                </tr>
+                <tr>
+                    <td><strong>Gender</strong></td>
+                    <td>${student.Gender}</td>
+                </tr>
+                <tr>
+                    <td><strong>Date of Birth</strong></td>
+                    <td>${student.DOB}</td>
+                </tr>
+                <tr>
+                    <td><strong>Student Phone</strong></td>
+                    <td>${student.StudentPhone || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <td><strong>Parent Phone</strong></td>
+                    <td>${student.ParentPhone || 'N/A'}</td>
+                </tr>
             `;
         }
 
-        function loadAttendanceContent() {
-            const content = document.getElementById('attendanceContent');
-            content.innerHTML = '<p>Add your attendance logic here</p>';
-            // TODO: Add attendance API call
+        function switchToEditMode() {
+            const student = currentStudent;
+            document.getElementById('infoViewMode').classList.add('hidden');
+            document.getElementById('infoEditMode').classList.remove('hidden');
+
+            document.getElementById('editDOB').value = student.DOB || '';
+            document.getElementById('editGender').value = student.Gender || '';
+            document.getElementById('editStudentPhone').value = student.StudentPhone || '';
+            document.getElementById('editParentPhone').value = student.ParentPhone || '';
+            document.getElementById('editAddress').value = student.Address || '';
+            document.getElementById('editParentEmail').value = student.ParentEmail || '';
         }
 
-        function loadFeesContent() {
+        function switchToViewMode() {
+            document.getElementById('infoViewMode').classList.remove('hidden');
+            document.getElementById('infoEditMode').classList.add('hidden');
+        }
+
+        async function submitChanges(event) {
+            event.preventDefault();
+
+            const formData = new FormData(document.getElementById('editForm'));
+
+            try {
+                const response = await fetch('/changeinfo', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage(data.message, 'success');
+
+                    currentStudent.DOB = formData.get('dob');
+                    currentStudent.Gender = formData.get('gender');
+                    currentStudent.StudentPhone = formData.get('StudentPhone');
+                    currentStudent.ParentPhone = formData.get('Parentphone');
+                    currentStudent.Address = formData.get('Address');
+                    currentStudent.ParentEmail = formData.get('ParentEmail');
+
+                    renderStudentInfo(currentStudent);
+                    switchToViewMode();
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Error saving changes: ' + error.message, 'error');
+            }
+        }
+
+        async function loadFeesContent() {
             const content = document.getElementById('feesContent');
-            content.innerHTML = '<p>Add your fees logic here</p>';
-            // TODO: Add fees API call
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch('/fees');
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    renderFees(data.fees);
+                } else {
+                    content.innerHTML = '<p style="color: #f44336;">Error loading fees</p>';
+                }
+            } catch (error) {
+                content.innerHTML = `<p style="color: #f44336;">Error: ${error.message}</p>`;
+            }
         }
 
-        function loadResultsContent() {
+        function renderFees(fees) {
+            const content = document.getElementById('feesContent');
+
+            if (!fees || fees.length === 0) {
+                content.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">No fee records found</p>';
+                return;
+            }
+
+            const monthNames = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+                                 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let totalDue = 0;
+            let totalPaid = 0;
+
+            let rows = fees.map(fee => {
+                const statusColor = fee.Status === 'Paid' ? '#4CAF50' :
+                                     fee.Status === 'Unpaid' ? '#f44336' : '#9e9e9e';
+
+                if (fee.Status !== 'Cancelled') {
+                    totalDue += parseFloat(fee.TotalAmount);
+                    if (fee.Status === 'Paid') totalPaid += parseFloat(fee.TotalAmount);
+                }
+
+                return `
+                    <tr>
+                        <td>${monthNames[fee.Month]} ${fee.Year}</td>
+                        <td>${parseFloat(fee.TuitionFee).toFixed(2)}</td>
+                        <td>${parseFloat(fee.ExamFee).toFixed(2)}</td>
+                        <td>${parseFloat(fee.TransportFee).toFixed(2)}</td>
+                        <td><strong>${parseFloat(fee.TotalAmount).toFixed(2)}</strong></td>
+                        <td><span style="color: ${statusColor}; font-weight: 600;">${fee.Status}</span></td>
+                        <td>${fee.DueDate || 'N/A'}</td>
+                        <td>${fee.PaidDate || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            content.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Tuition</th>
+                            <th>Exam</th>
+                            <th>Transport</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Paid Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+                <div class="attendance-summary">
+                    <div class="stat-box">
+                        <div class="stat-number">${totalDue.toFixed(2)}</div>
+                        <div class="stat-label">Total Billed</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${totalPaid.toFixed(2)}</div>
+                        <div class="stat-label">Total Paid</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${(totalDue - totalPaid).toFixed(2)}</div>
+                        <div class="stat-label">Outstanding</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function resetResultsSelector() {
+            document.getElementById('resultsContent').innerHTML = '';
+            document.getElementById('resultClassID').value = '';
+            document.getElementById('resultSubject').value = '';
+            document.getElementById('resultType').value = 'FirstTerm';
+            onResultTypeChange();
+        }
+
+        function onResultTypeChange() {
+            const type = document.getElementById('resultType').value;
+            const subjectGroup = document.getElementById('subjectNameGroup');
+            if (type === 'Subject') {
+                subjectGroup.classList.remove('hidden');
+            } else {
+                subjectGroup.classList.add('hidden');
+            }
+        }
+
+        async function fetchResults() {
+            const type = document.getElementById('resultType').value;
+            const classId = document.getElementById('resultClassID').value;
+            const subject = document.getElementById('resultSubject').value;
             const content = document.getElementById('resultsContent');
-            content.innerHTML = '<p>Add your results logic here</p>';
-            // TODO: Add results API call
+
+            if (!classId) {
+                content.innerHTML = '<p style="color: #f44336;">Please enter a class</p>';
+                return;
+            }
+
+            if (type === 'Subject' && !subject.trim()) {
+                content.innerHTML = '<p style="color: #f44336;">Please enter a subject name</p>';
+                return;
+            }
+
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                if (type === 'CompleteYear') {
+                    const [firstRes, midRes, finalRes] = await Promise.all([
+                        fetch(`/firstresults?classid=${classId}`).then(r => r.json()),
+                        fetch(`/midsresults?classid=${classId}`).then(r => r.json()),
+                        fetch(`/finalresults?classid=${classId}`).then(r => r.json())
+                    ]);
+
+                    if (firstRes.status !== 'ok' || midRes.status !== 'ok' || finalRes.status !== 'ok') {
+                        content.innerHTML = '<p style="color: #f44336;">Error loading one or more terms</p>';
+                        return;
+                    }
+
+                    renderCompleteYearResults(firstRes.results, midRes.results, finalRes.results);
+                    return;
+                }
+
+                let url;
+                if (type === 'FirstTerm') url = `/firstresults?classid=${classId}`;
+                else if (type === 'MidTerm') url = `/midsresults?classid=${classId}`;
+                else if (type === 'FinalTerm') url = `/finalresults?classid=${classId}`;
+                else url = `/subjectresults?classid=${classId}&subject=${encodeURIComponent(subject)}`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status !== 'ok') {
+                    content.innerHTML = `<p style="color: #f44336;">${data.message || 'Error loading results'}</p>`;
+                    return;
+                }
+
+                if (type === 'Subject') {
+                    renderSubjectResults(data.results);
+                } else {
+                    renderTermResults(data.results);
+                }
+            } catch (error) {
+                content.innerHTML = `<p style="color: #f44336;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderTermResults(resultData) {
+            const content = document.getElementById('resultsContent');
+            const rows = resultData.result;
+            const totalMarks = resultData.total_marks;
+            const obtainedMarks = resultData.total_obtainmarks;
+            const average = resultData.average !== undefined
+                ? resultData.average
+                : (rows && rows.length ? obtainedMarks / rows.length : 0);
+
+            if (!rows || rows.length === 0) {
+                content.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">No results found for this class</p>';
+                return;
+            }
+
+            let tableRows = rows.map(r => `
+                <tr>
+                    <td>${r.SubjectName}</td>
+                    <td>${r.Marks}</td>
+                    <td>${r.totalMarks !== undefined ? r.totalMarks : 'N/A'}</td>
+                </tr>
+            `).join('');
+
+            const percentage = totalMarks > 0 ? ((obtainedMarks / totalMarks) * 100).toFixed(1) : '0.0';
+
+            content.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr><th>Subject</th><th>Obtained</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+                <div class="attendance-summary">
+                    <div class="stat-box">
+                        <div class="stat-number">${obtainedMarks}</div>
+                        <div class="stat-label">Obtained Marks</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${totalMarks}</div>
+                        <div class="stat-label">Total Marks</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${average.toFixed(1)}</div>
+                        <div class="stat-label">Average</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${percentage}%</div>
+                        <div class="stat-label">Percentage</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCompleteYearResults(firstData, midData, finalData) {
+            const content = document.getElementById('resultsContent');
+
+            const buildTermTable = (title, resultData) => {
+                const rows = resultData.result;
+                if (!rows || rows.length === 0) {
+                    return `
+                        <div class="term-section">
+                            <h3>${title}</h3>
+                            <p style="color: #666; padding: 10px 0;">No results found</p>
+                        </div>
+                    `;
+                }
+
+                const obtainedMarks = resultData.total_obtainmarks;
+                const totalMarks = resultData.total_marks;
+                const average = resultData.average !== undefined
+                    ? resultData.average
+                    : (rows.length ? obtainedMarks / rows.length : 0);
+                const percentage = totalMarks > 0 ? ((obtainedMarks / totalMarks) * 100).toFixed(1) : '0.0';
+
+                const tableRows = rows.map(r => `
+                    <tr>
+                        <td>${r.SubjectName}</td>
+                        <td>${r.Marks}</td>
+                        <td>${r.totalMarks !== undefined ? r.totalMarks : 'N/A'}</td>
+                    </tr>
+                `).join('');
+
+                return `
+                    <div class="term-section">
+                        <h3>${title} — ${obtainedMarks}/${totalMarks} (${percentage}%, avg ${average.toFixed(1)})</h3>
+                        <table class="table">
+                            <thead>
+                                <tr><th>Subject</th><th>Obtained</th><th>Total</th></tr>
+                            </thead>
+                            <tbody>${tableRows}</tbody>
+                        </table>
+                    </div>
+                `;
+            };
+
+            const grandObtained = firstData.total_obtainmarks + midData.total_obtainmarks + finalData.total_obtainmarks;
+            const grandTotal = firstData.total_marks + midData.total_marks + finalData.total_marks;
+            const grandPercentage = grandTotal > 0 ? ((grandObtained / grandTotal) * 100).toFixed(1) : '0.0';
+
+            content.innerHTML = `
+                ${buildTermTable('First Term', firstData)}
+                ${buildTermTable('Mid Term', midData)}
+                ${buildTermTable('Final Term', finalData)}
+                <div class="attendance-summary">
+                    <div class="stat-box">
+                        <div class="stat-number">${grandObtained}</div>
+                        <div class="stat-label">Total Obtained (Year)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${grandTotal}</div>
+                        <div class="stat-label">Total Marks (Year)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${grandPercentage}%</div>
+                        <div class="stat-label">Overall Percentage</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSubjectResults(rows) {
+            const content = document.getElementById('resultsContent');
+
+            if (!rows || rows.length === 0) {
+                content.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">No results found for this subject/class</p>';
+                return;
+            }
+
+            let tableRows = rows.map(r => `
+                <tr>
+                    <td>${r.ExamCategory}</td>
+                    <td>${r.SubjectName}</td>
+                    <td>${r.Marks}</td>
+                    <td>${r.totalMarks !== undefined ? r.totalMarks : 'N/A'}</td>
+                    <td>${((r.Marks / r.totalMarks) * 100).toFixed(1)}%</td>
+                </tr>
+            `).join('');
+
+            content.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr><th>Exam</th><th>Subject</th><th>Marks</th><th>Total</th><th>Percentage</th></tr>
+                    </thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+            `;
         }
 
         async function logout() {
@@ -571,6 +1481,7 @@
                 const modal = document.getElementById(modalId);
                 if (event.target === modal) {
                     modal.style.display = 'none';
+                    switchToViewMode();
                 }
             });
         }
