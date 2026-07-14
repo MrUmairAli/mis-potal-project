@@ -359,226 +359,344 @@ use school;
 -- RESULTS TABLE - WITH SUBJECT NAME (NO SUBJECT ID)
 -- =====================================================
 
+-- =====================================================
+-- SUBJECTS TABLE
+-- =====================================================
+DROP TABLE IF EXISTS Subjects;
+
+CREATE TABLE Subjects (
+    SubjectID INT PRIMARY KEY AUTO_INCREMENT,
+    SubjectName VARCHAR(100) NOT NULL UNIQUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Subjects (SubjectName) VALUES
+('English'),
+('Mathematics'),
+('Science'),
+('Social Studies'),
+('Urdu'),
+('Islamic Studies');
+-- SubjectIDs will be 1-6 in this order, used below
+
+-- =====================================================
+-- RESULTS TABLE (now uses SubjectID instead of SubjectName)
+-- =====================================================
 DROP TABLE IF EXISTS Results;
 
 CREATE TABLE Results (
-  ResultID INT PRIMARY KEY AUTO_INCREMENT,
-  StudentID INT NOT NULL,
-  ClassID INT NOT NULL,
-  SubjectName VARCHAR(100) NOT NULL,
-  ExamCategory ENUM('MidTerm', 'FirstTerm', 'FinalTerm') NOT NULL,
-  Marks DECIMAL(5,2) NOT NULL,
-  Grade VARCHAR(2),
-  Remarks VARCHAR(255),
-  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
-  -- Unique: One result per student per subject per exam
-  UNIQUE KEY unique_result (StudentID, ClassID, SubjectName, ExamCategory),
-  
-  -- Indexes
-  INDEX idx_studentid (StudentID),
-  INDEX idx_classid (ClassID),
-  INDEX idx_subjectname (SubjectName),
-  INDEX idx_examcategory (ExamCategory),
-  INDEX idx_grade (Grade),
-  
-  -- Foreign Keys
-  FOREIGN KEY (StudentID) REFERENCES students(StudentID) 
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE,
-  FOREIGN KEY (ClassID) REFERENCES classes(ClassID) 
-    ON DELETE RESTRICT 
-    ON UPDATE CASCADE
-);
+    ResultID INT PRIMARY KEY AUTO_INCREMENT,
+    StudentID INT NOT NULL,
+    ClassID INT NOT NULL,
+    SubjectID INT NOT NULL,
+    ExamCategory ENUM('MidTerm', 'FirstTerm', 'FinalTerm') NOT NULL,
+    Marks DECIMAL(5,2) NOT NULL,
+    Grade VARCHAR(2),
+    Remarks VARCHAR(255),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
--- =====================================================
--- INSERT SAMPLE RESULTS - MID TERM
--- =====================================================
+    -- One result per student per subject per exam
+    UNIQUE KEY unique_result (StudentID, ClassID, SubjectID, ExamCategory),
 
--- Student 10001 (Ahmed Hassan) - MidTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10001, 5, 'English', 'MidTerm', 78),
-(10001, 5, 'Mathematics', 'MidTerm', 85),
-(10001, 5, 'Science', 'MidTerm', 72),
-(10001, 5, 'Social Studies', 'MidTerm', 80),
-(10001, 5, 'Urdu', 'MidTerm', 88),
-(10001, 5, 'Islamic Studies', 'MidTerm', 92);
+    -- Indexes
+    INDEX idx_studentid (StudentID),
+    INDEX idx_classid (ClassID),
+    INDEX idx_subjectid (SubjectID),
+    INDEX idx_examcategory (ExamCategory),
+    INDEX idx_grade (Grade),
 
--- Student 10002 (Fatima Khan) - MidTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10002, 5, 'English', 'MidTerm', 75),
-(10002, 5, 'Mathematics', 'MidTerm', 68),
-(10002, 5, 'Science', 'MidTerm', 80),
-(10002, 5, 'Social Studies', 'MidTerm', 78),
-(10002, 5, 'Urdu', 'MidTerm', 85),
-(10002, 5, 'Islamic Studies', 'MidTerm', 90);
+    -- Foreign Keys
+    FOREIGN KEY (StudentID) REFERENCES students(StudentID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (ClassID) REFERENCES classes(ClassID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);-- MID TERM
+INSERT INTO Results (StudentID, ClassID, SubjectID, ExamCategory, Marks) VALUES
+(10001, 5, 1, 'MidTerm', 78), (10001, 5, 2, 'MidTerm', 85), (10001, 5, 3, 'MidTerm', 72),
+(10001, 5, 4, 'MidTerm', 80), (10001, 5, 5, 'MidTerm', 88), (10001, 5, 6, 'MidTerm', 92),
 
--- Student 10003 (Ali Raza) - MidTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10003, 5, 'English', 'MidTerm', 65),
-(10003, 5, 'Mathematics', 'MidTerm', 58),
-(10003, 5, 'Science', 'MidTerm', 70),
-(10003, 5, 'Social Studies', 'MidTerm', 75),
-(10003, 5, 'Urdu', 'MidTerm', 80),
-(10003, 5, 'Islamic Studies', 'MidTerm', 88);
+(10002, 5, 1, 'MidTerm', 75), (10002, 5, 2, 'MidTerm', 68), (10002, 5, 3, 'MidTerm', 80),
+(10002, 5, 4, 'MidTerm', 78), (10002, 5, 5, 'MidTerm', 85), (10002, 5, 6, 'MidTerm', 90),
 
--- Student 10004 (Zainab Malik) - MidTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10004, 5, 'English', 'MidTerm', 92),
-(10004, 5, 'Mathematics', 'MidTerm', 90),
-(10004, 5, 'Science', 'MidTerm', 88),
-(10004, 5, 'Social Studies', 'MidTerm', 89),
-(10004, 5, 'Urdu', 'MidTerm', 91),
-(10004, 5, 'Islamic Studies', 'MidTerm', 95);
+(10003, 5, 1, 'MidTerm', 65), (10003, 5, 2, 'MidTerm', 58), (10003, 5, 3, 'MidTerm', 70),
+(10003, 5, 4, 'MidTerm', 75), (10003, 5, 5, 'MidTerm', 80), (10003, 5, 6, 'MidTerm', 88),
 
--- Student 10005 (Hassan Ali) - MidTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10005, 5, 'English', 'MidTerm', 70),
-(10005, 5, 'Mathematics', 'MidTerm', 72),
-(10005, 5, 'Science', 'MidTerm', 75),
-(10005, 5, 'Social Studies', 'MidTerm', 80),
-(10005, 5, 'Urdu', 'MidTerm', 82),
-(10005, 5, 'Islamic Studies', 'MidTerm', 85);
+(10004, 5, 1, 'MidTerm', 92), (10004, 5, 2, 'MidTerm', 90), (10004, 5, 3, 'MidTerm', 88),
+(10004, 5, 4, 'MidTerm', 89), (10004, 5, 5, 'MidTerm', 91), (10004, 5, 6, 'MidTerm', 95),
 
--- =====================================================
--- INSERT SAMPLE RESULTS - FIRST TERM
--- =====================================================
+(10005, 5, 1, 'MidTerm', 70), (10005, 5, 2, 'MidTerm', 72), (10005, 5, 3, 'MidTerm', 75),
+(10005, 5, 4, 'MidTerm', 80), (10005, 5, 5, 'MidTerm', 82), (10005, 5, 6, 'MidTerm', 85);
 
--- Student 10001 (Ahmed Hassan) - FirstTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10001, 5, 'English', 'FirstTerm', 82),
-(10001, 5, 'Mathematics', 'FirstTerm', 88),
-(10001, 5, 'Science', 'FirstTerm', 75),
-(10001, 5, 'Social Studies', 'FirstTerm', 82),
-(10001, 5, 'Urdu', 'FirstTerm', 90),
-(10001, 5, 'Islamic Studies', 'FirstTerm', 94);
+-- FIRST TERM
+INSERT INTO Results (StudentID, ClassID, SubjectID, ExamCategory, Marks) VALUES
+(10001, 5, 1, 'FirstTerm', 82), (10001, 5, 2, 'FirstTerm', 88), (10001, 5, 3, 'FirstTerm', 75),
+(10001, 5, 4, 'FirstTerm', 82), (10001, 5, 5, 'FirstTerm', 90), (10001, 5, 6, 'FirstTerm', 94),
 
--- Student 10002 (Fatima Khan) - FirstTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10002, 5, 'English', 'FirstTerm', 78),
-(10002, 5, 'Mathematics', 'FirstTerm', 70),
-(10002, 5, 'Science', 'FirstTerm', 82),
-(10002, 5, 'Social Studies', 'FirstTerm', 80),
-(10002, 5, 'Urdu', 'FirstTerm', 87),
-(10002, 5, 'Islamic Studies', 'FirstTerm', 92);
+(10002, 5, 1, 'FirstTerm', 78), (10002, 5, 2, 'FirstTerm', 70), (10002, 5, 3, 'FirstTerm', 82),
+(10002, 5, 4, 'FirstTerm', 80), (10002, 5, 5, 'FirstTerm', 87), (10002, 5, 6, 'FirstTerm', 92),
 
--- Student 10003 (Ali Raza) - FirstTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10003, 5, 'English', 'FirstTerm', 68),
-(10003, 5, 'Mathematics', 'FirstTerm', 60),
-(10003, 5, 'Science', 'FirstTerm', 72),
-(10003, 5, 'Social Studies', 'FirstTerm', 77),
-(10003, 5, 'Urdu', 'FirstTerm', 82),
-(10003, 5, 'Islamic Studies', 'FirstTerm', 90);
+(10003, 5, 1, 'FirstTerm', 68), (10003, 5, 2, 'FirstTerm', 60), (10003, 5, 3, 'FirstTerm', 72),
+(10003, 5, 4, 'FirstTerm', 77), (10003, 5, 5, 'FirstTerm', 82), (10003, 5, 6, 'FirstTerm', 90),
 
--- Student 10004 (Zainab Malik) - FirstTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10004, 5, 'English', 'FirstTerm', 94),
-(10004, 5, 'Mathematics', 'FirstTerm', 92),
-(10004, 5, 'Science', 'FirstTerm', 90),
-(10004, 5, 'Social Studies', 'FirstTerm', 91),
-(10004, 5, 'Urdu', 'FirstTerm', 93),
-(10004, 5, 'Islamic Studies', 'FirstTerm', 96);
+(10004, 5, 1, 'FirstTerm', 94), (10004, 5, 2, 'FirstTerm', 92), (10004, 5, 3, 'FirstTerm', 90),
+(10004, 5, 4, 'FirstTerm', 91), (10004, 5, 5, 'FirstTerm', 93), (10004, 5, 6, 'FirstTerm', 96),
 
--- Student 10005 (Hassan Ali) - FirstTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10005, 5, 'English', 'FirstTerm', 72),
-(10005, 5, 'Mathematics', 'FirstTerm', 74),
-(10005, 5, 'Science', 'FirstTerm', 77),
-(10005, 5, 'Social Studies', 'FirstTerm', 82),
-(10005, 5, 'Urdu', 'FirstTerm', 84),
-(10005, 5, 'Islamic Studies', 'FirstTerm', 87);
+(10005, 5, 1, 'FirstTerm', 72), (10005, 5, 2, 'FirstTerm', 74), (10005, 5, 3, 'FirstTerm', 77),
+(10005, 5, 4, 'FirstTerm', 82), (10005, 5, 5, 'FirstTerm', 84), (10005, 5, 6, 'FirstTerm', 87);
 
--- =====================================================
--- INSERT SAMPLE RESULTS - FINAL TERM
--- =====================================================
+-- FINAL TERM
+INSERT INTO Results (StudentID, ClassID, SubjectID, ExamCategory, Marks) VALUES
+(10001, 5, 1, 'FinalTerm', 85), (10001, 5, 2, 'FinalTerm', 90), (10001, 5, 3, 'FinalTerm', 78),
+(10001, 5, 4, 'FinalTerm', 84), (10001, 5, 5, 'FinalTerm', 92), (10001, 5, 6, 'FinalTerm', 95),
 
--- Student 10001 (Ahmed Hassan) - FinalTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10001, 5, 'English', 'FinalTerm', 85),
-(10001, 5, 'Mathematics', 'FinalTerm', 90),
-(10001, 5, 'Science', 'FinalTerm', 78),
-(10001, 5, 'Social Studies', 'FinalTerm', 84),
-(10001, 5, 'Urdu', 'FinalTerm', 92),
-(10001, 5, 'Islamic Studies', 'FinalTerm', 95);
+(10002, 5, 1, 'FinalTerm', 82), (10002, 5, 2, 'FinalTerm', 72), (10002, 5, 3, 'FinalTerm', 85),
+(10002, 5, 4, 'FinalTerm', 83), (10002, 5, 5, 'FinalTerm', 89), (10002, 5, 6, 'FinalTerm', 94),
 
--- Student 10002 (Fatima Khan) - FinalTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10002, 5, 'English', 'FinalTerm', 82),
-(10002, 5, 'Mathematics', 'FinalTerm', 72),
-(10002, 5, 'Science', 'FinalTerm', 85),
-(10002, 5, 'Social Studies', 'FinalTerm', 83),
-(10002, 5, 'Urdu', 'FinalTerm', 89),
-(10002, 5, 'Islamic Studies', 'FinalTerm', 94);
+(10003, 5, 1, 'FinalTerm', 72), (10003, 5, 2, 'FinalTerm', 65), (10003, 5, 3, 'FinalTerm', 75),
+(10003, 5, 4, 'FinalTerm', 80), (10003, 5, 5, 'FinalTerm', 85), (10003, 5, 6, 'FinalTerm', 92),
 
--- Student 10003 (Ali Raza) - FinalTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10003, 5, 'English', 'FinalTerm', 72),
-(10003, 5, 'Mathematics', 'FinalTerm', 65),
-(10003, 5, 'Science', 'FinalTerm', 75),
-(10003, 5, 'Social Studies', 'FinalTerm', 80),
-(10003, 5, 'Urdu', 'FinalTerm', 85),
-(10003, 5, 'Islamic Studies', 'FinalTerm', 92);
+(10004, 5, 1, 'FinalTerm', 96), (10004, 5, 2, 'FinalTerm', 94), (10004, 5, 3, 'FinalTerm', 92),
+(10004, 5, 4, 'FinalTerm', 93), (10004, 5, 5, 'FinalTerm', 95), (10004, 5, 6, 'FinalTerm', 97),
 
--- Student 10004 (Zainab Malik) - FinalTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10004, 5, 'English', 'FinalTerm', 96),
-(10004, 5, 'Mathematics', 'FinalTerm', 94),
-(10004, 5, 'Science', 'FinalTerm', 92),
-(10004, 5, 'Social Studies', 'FinalTerm', 93),
-(10004, 5, 'Urdu', 'FinalTerm', 95),
-(10004, 5, 'Islamic Studies', 'FinalTerm', 97);
-
--- Student 10005 (Hassan Ali) - FinalTerm
-INSERT INTO Results (StudentID, ClassID, SubjectName, ExamCategory, Marks) VALUES
-(10005, 5, 'English', 'FinalTerm', 75),
-(10005, 5, 'Mathematics', 'FinalTerm', 77),
-(10005, 5, 'Science', 'FinalTerm', 80),
-(10005, 5, 'Social Studies', 'FinalTerm', 85),
-(10005, 5, 'Urdu', 'FinalTerm', 87),
-(10005, 5, 'Islamic Studies', 'FinalTerm', 90);
-
--- =====================================================
--- GRADE ASSIGNMENT FUNCTION
--- =====================================================
-
+(10005, 5, 1, 'FinalTerm', 75), (10005, 5, 2, 'FinalTerm', 77), (10005, 5, 3, 'FinalTerm', 80),
+(10005, 5, 4, 'FinalTerm', 85), (10005, 5, 5, 'FinalTerm', 87), (10005, 5, 6, 'FinalTerm', 90);
 DELIMITER $$
 
-CREATE FUNCTION GetGrade(marks DECIMAL(5,2)) 
+CREATE FUNCTION GetGrade(marks DECIMAL(5,2))
 RETURNS VARCHAR(2)
 DETERMINISTIC
 BEGIN
-  IF marks >= 90 THEN
-    RETURN 'A+';
-  ELSEIF marks >= 85 THEN
-    RETURN 'A';
-  ELSEIF marks >= 80 THEN
-    RETURN 'A-';
-  ELSEIF marks >= 75 THEN
-    RETURN 'B+';
-  ELSEIF marks >= 70 THEN
-    RETURN 'B';
-  ELSEIF marks >= 65 THEN
-    RETURN 'B-';
-  ELSEIF marks >= 60 THEN
-    RETURN 'C+';
-  ELSEIF marks >= 55 THEN
-    RETURN 'C';
-  ELSEIF marks >= 50 THEN
-    RETURN 'C-';
-  ELSEIF marks >= 40 THEN
-    RETURN 'D';
-  ELSE
-    RETURN 'F';
+  IF marks >= 90 THEN RETURN 'A+';
+  ELSEIF marks >= 85 THEN RETURN 'A';
+  ELSEIF marks >= 80 THEN RETURN 'A-';
+  ELSEIF marks >= 75 THEN RETURN 'B+';
+  ELSEIF marks >= 70 THEN RETURN 'B';
+  ELSEIF marks >= 65 THEN RETURN 'B-';
+  ELSEIF marks >= 60 THEN RETURN 'C+';
+  ELSEIF marks >= 55 THEN RETURN 'C';
+  ELSEIF marks >= 50 THEN RETURN 'C-';
+  ELSEIF marks >= 40 THEN RETURN 'D';
+  ELSE RETURN 'F';
   END IF;
 END$$
 
 DELIMITER ;
 
+UPDATE Results SET Grade = GetGrade(Marks) WHERE Grade IS NULL;
+use school;
+
 -- =====================================================
--- UPDATE GRADES
+-- TEACHERS TABLE
+-- =====================================================
+REATE TABLE Teachers (
+  TeacherID INT PRIMARY KEY AUTO_INCREMENT,
+  passwords varchar(200) default "11111",
+  TeacherName VARCHAR(100) NOT NULL,
+  Email VARCHAR(100) UNIQUE NOT NULL,
+  Phone VARCHAR(20) NOT NULL,
+  Gender ENUM('Male', 'Female', 'Other'),
+  DOB DATE,
+  SubjectID INT NOT NULL,
+  Qualification VARCHAR(100),
+  Experience INT,
+  JoiningDate DATE NOT NULL,
+  IsActive BOOLEAN DEFAULT TRUE,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  
+  INDEX idx_subjectid (SubjectID),
+  INDEX idx_email (Email),
+  
+  FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+
+
+-- =====================================================
+-- EMPLOYEES TABLE
 -- =====================================================
 
-UPDATE Results SET Grade = GetGrade(Marks) WHERE Grade IS NULL;
-select * from Results;
+CREATE TABLE Employees (
+  EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+  EmployeeName VARCHAR(100) NOT NULL,
+  Email VARCHAR(100) UNIQUE NOT NULL,
+  Phone VARCHAR(20) NOT NULL,
+  Gender ENUM('M', 'F', 'Other'),
+  DOB DATE,
+  Department VARCHAR(100) NOT NULL,
+  Designation VARCHAR(100) NOT NULL,
+  Salary DECIMAL(10,2),
+  JoiningDate DATE NOT NULL,
+  IsActive BOOLEAN DEFAULT TRUE,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  INDEX idx_department (Department),
+  INDEX idx_email (Email)
+);
+
+-- =====================================================
+-- SAMPLE DATA - TEACHERS
+-- =====================================================
+
+INSERT INTO Teachers (TeacherID,TeacherName, Email, Phone, Gender, DOB, SubjectID, Qualification, Experience, JoiningDate) VALUES
+(1001,'Mr. Ahmed Khan', 'ahmed.khan@school.com', '03001234567', 'Male', '1985-05-15', 1, 'M.A. English', 10, '2015-01-15'),
+(1002,'Mrs. Fatima Ali', 'fatima.ali@school.com', '03009876543', 'Female', '1988-08-22', 2, 'M.Sc. Mathematics', 8, '2017-06-20'),
+(1003,'Mr. Hassan Raza', 'hassan.raza@school.com', '03005555555', 'Male', '1990-03-10', 3, 'B.Sc. Science', 6, '2019-09-01'),
+(1004,'Miss Sara Malik', 'sara.malik@school.com', '03003333333', 'Female', '1992-11-30', 4, 'M.A. Social Studies', 5, '2020-07-15');
+
+-- =====================================================
+-- SAMPLE DATA - EMPLOYEES
+-- =====================================================
+
+INSERT INTO Employees (EmployeeName, Email, Phone, Gender, DOB, Department, Designation, Salary, JoiningDate) VALUES
+('Mr. Ali Hassan', 'ali.hassan@school.com', '03002222222', 'M', '1975-07-20', 'Administration', 'Principal', 150000, '2010-01-01'),
+('Mrs. Zainab Khan', 'zainab.khan@school.com', '03004444444', 'F', '1980-12-15', 'Administration', 'Vice Principal', 120000, '2012-06-01'),
+('Mr. Bilal Ahmed', 'bilal.ahmed@school.com', '03006666666', 'M', '1983-04-25', 'Finance', 'Accountant', 70000, '2018-03-15'),
+('Miss Amina Shah', 'amina.shah@school.com', '03007777777', 'F', '1986-09-10', 'Library', 'Librarian', 60000, '2019-08-20');
+select * from subjects;
+alter table results add column totalMarks int default 100;
+
+
+-- =====================================================
+-- DIARY TABLE (SIMPLIFIED)
+-- =====================================================
+
+CREATE TABLE Diary (
+  DiaryID INT PRIMARY KEY AUTO_INCREMENT,
+  TeacherID INT NOT NULL,
+  ClassID INT NOT NULL,
+  SubjectID INT NOT NULL,
+  Date DATE NOT NULL,
+  DiaryContent TEXT NOT NULL,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  -- Unique: One diary entry per teacher per class per subject per date
+  UNIQUE KEY unique_diary (TeacherID, ClassID, SubjectID, Date),
+  
+  -- Indexes
+  INDEX idx_teacherid (TeacherID),
+  INDEX idx_classid (ClassID),
+  INDEX idx_subjectid (SubjectID),
+  INDEX idx_date (Date),
+  
+  -- Foreign Keys
+  FOREIGN KEY (TeacherID) REFERENCES teachers(TeacherID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (ClassID) REFERENCES classes(ClassID) 
+    ON DELETE RESTRICT 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (SubjectID) REFERENCES subjects(SubjectID) 
+    ON DELETE RESTRICT 
+    ON UPDATE CASCADE
+);
+
+
+-- =====================================================
+-- INSERT SAMPLE DATA
+-- =====================================================
+
+INSERT INTO Diary (TeacherID, ClassID, SubjectID, Date, DiaryContent) VALUES
+(1001, 5, 1, '2024-01-15', 'Class was very interactive. Students asked good questions about English grammar. Covered Present Tense and Articles.'),
+(1001, 5, 1, '2024-01-16', 'Completed lesson on Sentence Structure. All students understood the concept well.'),
+(1001, 5, 1, '2024-01-17', 'Quiz on grammar. Overall performance was good. Average score 78%.'),
+
+(1002, 5, 2, '2024-01-15', 'Covered Chapter 2 - Algebra. Students found quadratic equations challenging. Need more practice.'),
+(1002, 5, 2, '2024-01-16', 'Practical examples of algebra in real life. Much better understanding now. All students engaged.'),
+(1002, 5, 2, '2024-01-17', 'Mid-assessment on Algebra. Good results. Average 82%. Excellent progress.'),
+
+(1003, 5, 3, '2024-01-15', 'Started Science Chapter 5 - Human Body Systems. Students very interested. Great enthusiasm from the class.'),
+(1003, 5, 3, '2024-01-16', 'Practical demonstration of heart rate and pulse. Very engaging activity. All participated.'),
+(1003, 5, 3, '2024-01-17', 'Discussion on healthy lifestyle and exercise. Good engagement from students.'),
+
+(1001, 6, 1, '2024-01-15', 'Introduction to Literature. Class 6 is very attentive. Good start with new class.'),
+(1001, 6, 1, '2024-01-16', 'Discussion on character analysis. Students gave good insights. Well-structured answers.'),
+
+(1002, 6, 2, '2024-01-15', 'Geometry basics for Class 6. Everyone grasped the concept. All students performing well.'),
+(1002, 6, 2, '2024-01-16', 'Practical with geometry tools. Measurement activity. Good practical skills.');
+
+
+
+
+alter table teachers add column salary_amount int default 25000;
+alter table students add column fee_amount int default 2000;
+ 
+
+ -- =====================================================
+-- SALARY TABLE FOR TEACHERS
+-- =====================================================
+
+CREATE TABLE TeacherSalary (
+  SalaryID INT PRIMARY KEY AUTO_INCREMENT,
+  TeacherID INT NOT NULL,
+  Month INT NOT NULL,
+  Year INT NOT NULL,
+  BaseSalary DECIMAL(10,2) NOT NULL,
+  Allowances DECIMAL(10,2) DEFAULT 0,
+  Deductions DECIMAL(10,2) DEFAULT 0,
+  NetSalary DECIMAL(10,2) NOT NULL,
+  PaymentStatus ENUM('Pending', 'Paid') DEFAULT 'Pending',
+  PaymentDate DATE,
+  PaymentMethod VARCHAR(50),
+  Remarks VARCHAR(500),
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  -- Unique: One salary entry per teacher per month per year
+  UNIQUE KEY unique_salary (TeacherID, Month, Year),
+  
+  -- Indexes
+  INDEX idx_teacherid (TeacherID),
+  INDEX idx_month_year (Month, Year),
+  INDEX idx_payment_status (PaymentStatus),
+  
+  -- Foreign Key
+  FOREIGN KEY (TeacherID) REFERENCES teachers(TeacherID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+-- =====================================================
+-- INSERT SAMPLE DATA
+-- =====================================================
+
+INSERT INTO TeacherSalary (TeacherID, Month, Year, BaseSalary, Allowances, Deductions, NetSalary, PaymentStatus, PaymentDate, PaymentMethod) VALUES
+(1001, 1, 2024, 25000, 5000, 1500, 28500, 'Paid', '2024-02-05', 'Bank Transfer'),
+(1001, 2, 2024, 25000, 5000, 1500, 28500, 'Paid', '2024-03-05', 'Bank Transfer'),
+(1001, 3, 2024, 25000, 5000, 1500, 28500, 'Pending', NULL, NULL),
+
+(1002, 1, 2024, 30000, 6000, 2000, 34000, 'Paid', '2024-02-05', 'Bank Transfer'),
+(1002, 2, 2024, 30000, 6000, 2000, 34000, 'Paid', '2024-03-05', 'Bank Transfer'),
+(1002, 3, 2024, 30000, 6000, 2000, 34000, 'Pending', NULL, NULL),
+
+(1003, 1, 2024, 28000, 5500, 1800, 31700, 'Paid', '2024-02-05', 'Bank Transfer'),
+(1003, 2, 2024, 28000, 5500, 1800, 31700, 'Paid', '2024-03-05', 'Bank Transfer'),
+(1003, 3, 2024, 28000, 5500, 1800, 31700, 'Pending', NULL, NULL);
+
+alter table employees add column password varchar(250) ;
+alter table employees add column address text ;
+use school;
+CREATE TABLE EmployeeSalary (
+    SalaryID INT AUTO_INCREMENT PRIMARY KEY,
+    EmployeeID INT NOT NULL,
+    Month INT NOT NULL,          -- 1-12
+    Year INT NOT NULL,
+    BasicSalary DECIMAL(10,2) NOT NULL,
+    Bonus DECIMAL(10,2) DEFAULT 0,
+    Deductions DECIMAL(10,2) DEFAULT 0,
+    NetSalary DECIMAL(10,2) GENERATED ALWAYS AS (BasicSalary + Bonus - Deductions) STORED,
+    PaidOn DATE,
+    FOREIGN KEY (EmployeeID) REFERENCES employees(EmployeeID),
+    UNIQUE KEY unique_emp_month_year (EmployeeID, Month, Year)
+);
+select * from EmployeeSalary;

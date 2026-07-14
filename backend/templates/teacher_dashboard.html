@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .navbar h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .teacher-info {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .teacher-info h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background-color: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-edit:hover {
+            background-color: #5568d3;
+        }
+
+        .dashboard-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .box-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .box h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .box p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .box-attendance {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .box-attendance h3, .box-attendance p { color: white; }
+
+        .box-checkattendance {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .box-checkattendance h3, .box-checkattendance p { color: white; }
+
+        .box-monthlyattendance {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .box-monthlyattendance h3, .box-monthlyattendance p { color: white; }
+
+        .box-diary {
+            background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 50%, #ff99ac 100%);
+        }
+
+        .box-diary h3, .box-diary p { color: white; }
+
+        .box-studentinfo {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .box-studentinfo h3, .box-studentinfo p { color: white; }
+
+        .box-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .box-info h3, .box-info p { color: white; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover { color: #333; }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover { background-color: #5568d3; }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover { background-color: #d0d0d0; }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.show { display: block; }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-box p {
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .result-box strong { color: #667eea; }
+
+        .attendance-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .attendance-list-table th {
+            background-color: #f5f5f5;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .attendance-list-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .attendance-list-table select,
+        .attendance-list-table input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .status-required {
+            border-color: #e74c3c !important;
+        }
+
+        .edit-attendance-section {
+            margin-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header-day {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .attendance-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .calendar-day.present { background-color: #4CAF50; color: white; border-color: #45a049; }
+        .calendar-day.absent { background-color: #f44336; color: white; border-color: #da190b; }
+        .calendar-day.late { background-color: #ff9800; color: white; border-color: #e68900; }
+        .calendar-day.leave { background-color: #9c27b0; color: white; border-color: #7b1fa2; }
+        .calendar-day.holiday { background-color: #e0e0e0; color: #666; border-color: #bdbdbd; }
+        .calendar-day.empty { background-color: white; border-color: #f0f0f0; }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            font-size: 12px;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .stat-box { text-align: center; padding: 10px; }
+        .stat-box .stat-number { font-size: 22px; font-weight: 600; color: #667eea; }
+        .stat-box .stat-label { font-size: 12px; color: #666; margin-top: 5px; }
+
+        .diary-entry {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .diary-entry-meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .diary-entry-content {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .diary-entry-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .diary-entry-actions button {
+            padding: 6px 14px;
+            font-size: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-diary-edit {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-diary-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .diary-add-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .diary-add-box h3 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; }
+            .dashboard-boxes { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>👨‍🏫 Teacher Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="message" id="messageDiv"></div>
+
+        <div class="teacher-info">
+            <h2 id="teacherName">Loading...</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Teacher ID</div>
+                    <div class="info-value" id="teacherID">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Subject</div>
+                    <div class="info-value" id="teacherSubject">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value" id="teacherEmail">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Phone</div>
+                    <div class="info-value" id="teacherPhone">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Experience</div>
+                    <div class="info-value" id="teacherExp">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Qualification</div>
+                    <div class="info-value" id="teacherQual">-</div>
+                </div>
+            </div>
+            <button class="btn-edit" onclick="openEditModal()">Edit Profile</button>
+        </div>
+
+        <div class="dashboard-boxes">
+            <div class="box box-attendance" onclick="openAttendanceModal()">
+                <div class="box-icon">📋</div>
+                <h3>Take Attendance</h3>
+                <p>Mark attendance for a whole class</p>
+            </div>
+
+            <div class="box box-checkattendance" onclick="openCheckAttendanceModal()">
+                <div class="box-icon">🔍</div>
+                <h3>Check / Edit Attendance</h3>
+                <p>Look up a student's attendance for a date, then correct it</p>
+            </div>
+
+            <div class="box box-monthlyattendance" onclick="openMonthlyAttendanceModal()">
+                <div class="box-icon">📈</div>
+                <h3>Attendance Summary</h3>
+                <p>View a student's full month attendance calendar</p>
+            </div>
+
+            <div class="box box-diary" onclick="openDiaryModal()">
+                <div class="box-icon">📔</div>
+                <h3>Class Diary</h3>
+                <p>Add, view, edit, or delete diary entries</p>
+            </div>
+
+            <div class="box box-studentinfo" onclick="openStudentInfoModal()">
+                <div class="box-icon">🎓</div>
+                <h3>Student Info</h3>
+                <p>Look up a student's details</p>
+            </div>
+
+            <div class="box box-info" onclick="openEditModal()">
+                <div class="box-icon">👤</div>
+                <h3>My Profile</h3>
+                <p>Update your information</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            <form onsubmit="updateProfile(event)">
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDOB">Date of Birth</label>
+                    <input type="date" id="editDOB">
+                </div>
+                <div class="form-group">
+                    <label for="editGender">Gender</label>
+                    <select id="editGender">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone</label>
+                    <input type="tel" id="editPhone" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Take Attendance Modal -->
+    <div class="modal" id="attendanceModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Take Attendance</h2>
+                <button class="close-btn" onclick="closeModal('attendanceModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label for="attClass">Select Class</label>
+                <select id="attClass" onchange="loadClassForAttendance()" required>
+                    <option value="">-- Choose Class --</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="attDate">Date</label>
+                <input type="date" id="attDate" onchange="loadClassForAttendance()" required>
+            </div>
+
+            <div id="attendanceListContainer">
+                <p style="text-align:center; color:#666; padding: 20px;">Select a class and date to load students</p>
+            </div>
+
+            <div class="form-buttons" id="attendanceSubmitRow" style="display:none;">
+                <button class="btn btn-primary" onclick="submitBulkAttendance()">Submit Attendance</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('attendanceModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check / Edit Attendance Modal -->
+    <div class="modal" id="checkAttendanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Check / Edit Attendance</h2>
+                <button class="close-btn" onclick="closeModal('checkAttendanceModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label for="checkStudentID">Student ID</label>
+                <input type="number" id="checkStudentID" required>
+            </div>
+            <div class="form-group">
+                <label for="checkDate">Date</label>
+                <input type="date" id="checkDate" required>
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="checkAttendance()">Check Attendance</button>
+
+            <div id="checkAttendanceResult"></div>
+
+            <div id="editAttendanceSection" class="edit-attendance-section" style="display:none;">
+                <h3 style="margin-bottom: 15px; color: #333; font-size: 16px;">Update this record</h3>
+                <div class="form-group">
+                    <label for="editAttClassID">Class ID</label>
+                    <input type="number" id="editAttClassID" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAttStatus">Status</label>
+                    <select id="editAttStatus" required>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Late">Late</option>
+                        <option value="Leave">Leave</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editAttRemarks">Remarks (optional)</label>
+                    <textarea id="editAttRemarks" rows="2"></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" onclick="updateAttendance()">Update Attendance</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Attendance Summary Modal -->
+    <div class="modal" id="monthlyAttendanceModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>Student Monthly Attendance</h2>
+                <button class="close-btn" onclick="closeModal('monthlyAttendanceModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label for="monthlyStudentID">Student ID</label>
+                <input type="number" id="monthlyStudentID" required>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group">
+                    <label for="monthlyMonth">Month</label>
+                    <select id="monthlyMonth" required>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="monthlyYear">Year</label>
+                    <input type="number" id="monthlyYear" min="2020" max="2099" required>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%;" onclick="loadStudentMonthlyAttendance()">Check Attendance</button>
+
+            <div id="monthlyAttendanceResult" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Diary Modal -->
+    <div class="modal" id="diaryModal">
+        <div class="modal-content" style="max-width: 750px;">
+            <div class="modal-header">
+                <h2>Class Diary</h2>
+                <button class="close-btn" onclick="closeModal('diaryModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label for="diaryClassID">Class ID</label>
+                <input type="number" id="diaryClassID" onchange="loadDiaries()" required>
+            </div>
+
+            <div class="diary-add-box">
+                <h3>Add New Entry</h3>
+                <div class="form-group">
+                    <label for="diarySubjectID">Subject</label>
+                    <select id="diarySubjectID" required>
+                        <option value="">-- Select Subject --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="diaryDate">Date</label>
+                    <input type="date" id="diaryDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="diaryContent">Content</label>
+                    <textarea id="diaryContent" rows="3" required></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" onclick="addDiaryEntry()">Add Entry</button>
+            </div>
+
+            <h3 style="font-size: 15px; margin-bottom: 10px; color: #333;">Existing Entries</h3>
+            <div id="diaryListContainer">
+                <p style="text-align:center; color:#666; padding: 15px;">Enter a Class ID above to load entries</p>
+            </div>
+
+            <div id="editDiarySection" class="edit-attendance-section" style="display:none;">
+                <h3 style="margin-bottom: 15px; color: #333; font-size: 16px;">Edit Entry</h3>
+                <div class="form-group">
+                    <label for="editDiaryContent">Content</label>
+                    <textarea id="editDiaryContent" rows="3" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button class="btn btn-primary" onclick="saveDiaryEdit()">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelDiaryEdit()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Info Modal -->
+    <div class="modal" id="studentInfoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Student Info</h2>
+                <button class="close-btn" onclick="closeModal('studentInfoModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="lookupStudentID">Student ID</label>
+                <input type="number" id="lookupStudentID" required>
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="lookupStudent()">Look Up</button>
+            <div id="studentInfoResult"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentTeacher = null;
+        let classStudents = [];
+        let lastCheckedStudentId = null;
+        let lastCheckedDate = null;
+        let currentEditDiaryId = null;
+
+        window.addEventListener('load', async () => {
+            await loadTeacherInfo();
+        });
+
+        async function loadTeacherInfo() {
+            try {
+                const response = await fetch('/teacher/info');
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    currentTeacher = data.teacher;
+                    document.getElementById('teacherName').textContent = currentTeacher.TeacherName;
+                    document.getElementById('teacherID').textContent = currentTeacher.TeacherID;
+                    document.getElementById('teacherSubject').textContent = currentTeacher.SubjectName || '-';
+                    document.getElementById('teacherEmail').textContent = currentTeacher.Email;
+                    document.getElementById('teacherPhone').textContent = currentTeacher.Phone;
+                    document.getElementById('teacherExp').textContent = (currentTeacher.Experience || 0) + ' years';
+                    document.getElementById('teacherQual').textContent = currentTeacher.Qualification || '-';
+
+                    document.getElementById('editEmail').value = currentTeacher.Email;
+                    document.getElementById('editDOB').value = currentTeacher.DOB || '';
+                    document.getElementById('editGender').value = currentTeacher.Gender || '';
+                    document.getElementById('editPhone').value = currentTeacher.Phone;
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/';
+            }
+        }
+
+        async function updateProfile(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('editEmail').value;
+            const dob = document.getElementById('editDOB').value;
+            const gender = document.getElementById('editGender').value;
+            const teacherPhone = document.getElementById('editPhone').value;
+
+            try {
+                const params = new URLSearchParams({ dob, gender, teacherPhone, email });
+                const response = await fetch(`/teacherchangeinfo?${params.toString()}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('Profile updated successfully!', 'success');
+                    await loadTeacherInfo();
+                    closeModal('editModal');
+                } else {
+                    showMessage(data.message || 'Failed to update profile', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ===================== TAKE ATTENDANCE (whole class) =====================
+
+        async function loadClassForAttendance() {
+            const classId = document.getElementById('attClass').value;
+            const date = document.getElementById('attDate').value;
+            const container = document.getElementById('attendanceListContainer');
+            const submitRow = document.getElementById('attendanceSubmitRow');
+
+            if (!classId || !date) {
+                container.innerHTML = '<p style="text-align:center; color:#666; padding: 20px;">Select a class and date to load students</p>';
+                submitRow.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = '<p style="text-align:center; padding: 20px;">Loading students...</p>';
+
+            try {
+                const response = await fetch(`/showStudentsOfaClass?classid=${classId}`);
+                const data = await response.json();
+
+                if (data.status !== 'ok') {
+                    container.innerHTML = `<p style="color:#f44336; padding: 20px;">${data.message}</p>`;
+                    submitRow.style.display = 'none';
+                    return;
+                }
+
+                classStudents = data.students;
+                renderAttendanceTable(classStudents);
+                submitRow.style.display = 'flex';
+            } catch (error) {
+                container.innerHTML = `<p style="color:#f44336; padding: 20px;">Error: ${error.message}</p>`;
+                submitRow.style.display = 'none';
+            }
+        }
+
+        function renderAttendanceTable(students) {
+            const container = document.getElementById('attendanceListContainer');
+
+            if (!students || students.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#666; padding: 20px;">No students found in this class</p>';
+                return;
+            }
+
+            let rows = students.map(s => `
+                <tr>
+                    <td>${s.StudentID}</td>
+                    <td>${s.Name}</td>
+                    <td>
+                        <select id="status_${s.StudentID}" required>
+                            <option value="">-- Select --</option>
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Late">Late</option>
+                            <option value="Leave">Leave</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" id="remarks_${s.StudentID}" placeholder="Optional">
+                    </td>
+                </tr>
+            `).join('');
+
+            container.innerHTML = `
+                <table class="attendance-list-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        async function submitBulkAttendance() {
+            const classId = document.getElementById('attClass').value;
+            const date = document.getElementById('attDate').value;
+
+            let missing = [];
+            classStudents.forEach(s => {
+                const statusEl = document.getElementById(`status_${s.StudentID}`);
+                statusEl.classList.remove('status-required');
+                if (!statusEl.value) {
+                    missing.push(s.Name);
+                    statusEl.classList.add('status-required');
+                }
+            });
+
+            if (missing.length > 0) {
+                showMessage(`Please select a status for: ${missing.join(', ')}`, 'error');
+                return;
+            }
+
+            showMessage('Submitting attendance...', 'success');
+
+            let successCount = 0;
+            let failCount = 0;
+            let failNames = [];
+
+            for (const s of classStudents) {
+                const status = document.getElementById(`status_${s.StudentID}`).value;
+                const remarks = document.getElementById(`remarks_${s.StudentID}`).value;
+
+                try {
+                    const params = new URLSearchParams({
+                        studentid: s.StudentID,
+                        date: date,
+                        status: status,
+                        classid: classId,
+                        remarks: remarks || ''
+                    });
+
+                    const response = await fetch(`/takeattendance?${params.toString()}`, { method: 'POST' });
+                    const data = await response.json();
+
+                    if (data.status === 'ok') {
+                        successCount++;
+                    } else {
+                        failCount++;
+                        failNames.push(s.Name);
+                    }
+                } catch (error) {
+                    failCount++;
+                    failNames.push(s.Name);
+                }
+            }
+
+            if (failCount === 0) {
+                showMessage(`Attendance recorded for all ${successCount} students!`, 'success');
+                closeModal('attendanceModal');
+            } else {
+                showMessage(`${successCount} recorded, ${failCount} failed (${failNames.join(', ')}) — likely already marked for this date`, 'error');
+            }
+        }
+
+        // ===================== CHECK / EDIT ATTENDANCE =====================
+
+        async function checkAttendance() {
+            const studentid = document.getElementById('checkStudentID').value;
+            const date = document.getElementById('checkDate').value;
+            const resultDiv = document.getElementById('checkAttendanceResult');
+            const editSection = document.getElementById('editAttendanceSection');
+
+            if (!studentid || !date) {
+                showMessage('Enter Student ID and Date', 'error');
+                return;
+            }
+
+            resultDiv.innerHTML = '<p style="text-align:center; padding: 15px; color:#666;">Checking...</p>';
+            editSection.style.display = 'none';
+
+            try {
+                const response = await fetch(`/getattendance?studentid=${studentid}&date=${date}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    const record = data.attendance;
+                    resultDiv.innerHTML = `
+                        <div class="result-box">
+                            <p><strong>Student ID:</strong> ${record.StudentID}</p>
+                            <p><strong>Date:</strong> ${record.Date}</p>
+                            <p><strong>Status:</strong> ${record.Status}</p>
+                            <p><strong>Class ID:</strong> ${record.ClassID}</p>
+                            <p><strong>Remarks:</strong> ${record.Remarks || '-'}</p>
+                        </div>
+                    `;
+
+                    document.getElementById('editAttClassID').value = record.ClassID;
+                    document.getElementById('editAttStatus').value = record.Status;
+                    document.getElementById('editAttRemarks').value = record.Remarks || '';
+                    editSection.style.display = 'block';
+
+                    lastCheckedStudentId = studentid;
+                    lastCheckedDate = date;
+                } else {
+                    resultDiv.innerHTML = `<p style="color:#f44336; padding: 10px 0;">${data.message}</p>`;
+                    lastCheckedStudentId = null;
+                    lastCheckedDate = null;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:#f44336;">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function updateAttendance() {
+            if (!lastCheckedStudentId || !lastCheckedDate) {
+                showMessage('Check attendance first', 'error');
+                return;
+            }
+
+            const classid = document.getElementById('editAttClassID').value;
+            const status = document.getElementById('editAttStatus').value;
+            const remarks = document.getElementById('editAttRemarks').value;
+
+            try {
+                const params = new URLSearchParams({
+                    studentid: lastCheckedStudentId,
+                    date: lastCheckedDate,
+                    status,
+                    classid,
+                    remarks: remarks || ''
+                });
+                const response = await fetch(`/changeattendance?${params.toString()}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('Attendance updated successfully!', 'success');
+                    checkAttendance();
+                } else {
+                    showMessage(data.message || 'Failed to update attendance', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ===================== MONTHLY ATTENDANCE SUMMARY (calendar) =====================
+
+        function openMonthlyAttendanceModal() {
+            document.getElementById('monthlyAttendanceModal').classList.add('show');
+            document.getElementById('monthlyStudentID').value = '';
+            document.getElementById('monthlyAttendanceResult').innerHTML = '';
+            const today = new Date();
+            document.getElementById('monthlyMonth').value = today.getMonth() + 1;
+            document.getElementById('monthlyYear').value = today.getFullYear();
+        }
+
+        async function loadStudentMonthlyAttendance() {
+            const studentid = document.getElementById('monthlyStudentID').value;
+            const month = document.getElementById('monthlyMonth').value;
+            const year = document.getElementById('monthlyYear').value;
+            const resultDiv = document.getElementById('monthlyAttendanceResult');
+
+            if (!studentid) {
+                showMessage('Enter a Student ID', 'error');
+                return;
+            }
+
+            resultDiv.innerHTML = '<p style="text-align:center; padding: 15px; color:#666;">Loading...</p>';
+
+            try {
+                const response = await fetch(`/teacher/studentattendance?studentid=${studentid}&month=${month}&year=${year}`);
+                const data = await response.json();
+
+                if (data.status !== 'ok' || !data.attendance || data.attendance.length === 0) {
+                    resultDiv.innerHTML = '<p style="text-align:center; color:#666; padding: 20px;">Nothing found for this student in this month</p>';
+                    return;
+                }
+
+                renderTeacherCalendar(data.attendance, parseInt(month), parseInt(year));
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:#f44336; padding: 10px 0;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderTeacherCalendar(attendance, month, year) {
+            const resultDiv = document.getElementById('monthlyAttendanceResult');
+            const firstDay = new Date(year, month - 1, 1);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const attendanceMap = {};
+            attendance.forEach(record => {
+                attendanceMap[record.Date] = record.Status;
+            });
+
+            let html = '<div class="calendar-header">';
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                html += `<div class="calendar-header-day">${day}</div>`;
+            });
+            html += '</div>';
+
+            html += '<div class="attendance-calendar">';
+            let currentDate = new Date(startDate);
+            let stats = { present: 0, absent: 0, late: 0, leave: 0, holidays: 0 };
+
+            for (let i = 0; i < 42; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const status = attendanceMap[dateStr];
+                let className = 'calendar-day';
+                let displayText = currentDate.getDate();
+
+                if (currentDate.getMonth() + 1 !== month) {
+                    className += ' empty';
+                } else if (!status) {
+                    className += ' holiday';
+                    stats.holidays++;
+                } else {
+                    className += ' ' + status.toLowerCase();
+                    if (status === 'Present') stats.present++;
+                    else if (status === 'Absent') stats.absent++;
+                    else if (status === 'Late') stats.late++;
+                    else if (status === 'Leave') stats.leave++;
+                }
+
+                html += `<div class="${className}" title="${status || 'Holiday'}">${displayText}</div>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            html += '</div>';
+
+            html += `
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background-color: #4CAF50;"></div><span>Present</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: #f44336;"></div><span>Absent</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: #ff9800;"></div><span>Late</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: #9c27b0;"></div><span>Leave</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: #e0e0e0;"></div><span>Holiday</span></div>
+                </div>
+            `;
+
+            const totalClass = stats.present + stats.absent + stats.late + stats.leave;
+            const percent = totalClass > 0 ? Math.round((stats.present + stats.late) / totalClass * 100) : 0;
+
+            html += `
+                <div class="attendance-summary">
+                    <div class="stat-box"><div class="stat-number">${stats.present}</div><div class="stat-label">Present</div></div>
+                    <div class="stat-box"><div class="stat-number">${stats.absent}</div><div class="stat-label">Absent</div></div>
+                    <div class="stat-box"><div class="stat-number">${stats.late}</div><div class="stat-label">Late</div></div>
+                    <div class="stat-box"><div class="stat-number">${percent}%</div><div class="stat-label">Attendance %</div></div>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+        }
+
+        // ===================== CLASS DIARY =====================
+
+        async function loadSubjectOptions() {
+            const select = document.getElementById('diarySubjectID');
+            select.innerHTML = '<option value="">Loading...</option>';
+
+            try {
+                const response = await fetch('/teacher/subjects');
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.subjects.length > 0) {
+                    select.innerHTML = '<option value="">-- Select Subject --</option>' +
+                        data.subjects.map(s => `<option value="${s.SubjectID}">${s.SubjectName}</option>`).join('');
+                } else {
+                    select.innerHTML = '<option value="">No subjects available</option>';
+                }
+            } catch (error) {
+                select.innerHTML = '<option value="">Error loading subjects</option>';
+            }
+        }
+
+        function openDiaryModal() {
+            document.getElementById('diaryModal').classList.add('show');
+            document.getElementById('diaryClassID').value = '';
+            document.getElementById('diaryContent').value = '';
+            document.getElementById('diaryListContainer').innerHTML =
+                '<p style="text-align:center; color:#666; padding: 15px;">Enter a Class ID above to load entries</p>';
+            document.getElementById('editDiarySection').style.display = 'none';
+            currentEditDiaryId = null;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('diaryDate').value = today;
+            loadSubjectOptions();
+        }
+
+        async function addDiaryEntry() {
+            const classid = document.getElementById('diaryClassID').value;
+            const subjectid = document.getElementById('diarySubjectID').value;
+            const date = document.getElementById('diaryDate').value;
+            const content = document.getElementById('diaryContent').value;
+
+            if (!classid || !subjectid || !date || !content.trim()) {
+                showMessage('Please fill all fields, including selecting a subject', 'error');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({ classid, subjectid, content, date });
+                const response = await fetch(`/teacher/adddiary?${params.toString()}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('Diary entry added!', 'success');
+                    document.getElementById('diarySubjectID').value = '';
+                    document.getElementById('diaryContent').value = '';
+                    loadDiaries();
+                } else {
+                    showMessage(data.message || 'Failed to add entry', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function loadDiaries() {
+            const classid = document.getElementById('diaryClassID').value;
+            const container = document.getElementById('diaryListContainer');
+
+            if (!classid) {
+                container.innerHTML = '<p style="text-align:center; color:#666; padding: 15px;">Enter a Class ID above to load entries</p>';
+                return;
+            }
+
+            container.innerHTML = '<p style="text-align:center; padding: 15px; color:#666;">Loading...</p>';
+
+            try {
+                const response = await fetch(`/teacher/mydiaries?classid=${classid}`);
+                const data = await response.json();
+
+                if (data.status !== 'ok' || !data.diaries || data.diaries.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color:#666; padding: 15px;">No diary entries found for this class</p>';
+                    return;
+                }
+
+                renderDiaryList(data.diaries);
+            } catch (error) {
+                container.innerHTML = `<p style="color:#f44336; padding: 10px;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderDiaryList(diaries) {
+            const container = document.getElementById('diaryListContainer');
+
+            container.innerHTML = diaries.map(d => `
+                <div class="diary-entry">
+                    <div class="diary-entry-meta">Subject ID: ${d.SubjectID} &nbsp;|&nbsp; Date: ${d.Date}</div>
+                    <div class="diary-entry-content">${d.Diarycontent}</div>
+                    <div class="diary-entry-actions">
+                        <button class="btn-diary-edit" onclick="startDiaryEdit(${d.DiaryID}, '${String(d.Diarycontent).replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">Edit</button>
+                        <button class="btn-diary-delete" onclick="deleteDiaryEntry(${d.DiaryID})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startDiaryEdit(diaryId, currentContent) {
+            currentEditDiaryId = diaryId;
+            document.getElementById('editDiaryContent').value = currentContent;
+            document.getElementById('editDiarySection').style.display = 'block';
+            document.getElementById('editDiarySection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelDiaryEdit() {
+            currentEditDiaryId = null;
+            document.getElementById('editDiarySection').style.display = 'none';
+        }
+
+        async function saveDiaryEdit() {
+            if (!currentEditDiaryId) return;
+
+            const content = document.getElementById('editDiaryContent').value;
+            if (!content.trim()) {
+                showMessage('Content cannot be empty', 'error');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({ diaryid: currentEditDiaryId, content });
+                const response = await fetch(`/teacher/changediary?${params.toString()}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('Diary entry updated!', 'success');
+                    cancelDiaryEdit();
+                    loadDiaries();
+                } else {
+                    showMessage(data.message || 'Failed to update entry', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteDiaryEntry(diaryId) {
+            if (!confirm('Delete this diary entry? This cannot be undone.')) return;
+
+            try {
+                const params = new URLSearchParams({ diaryid: diaryId });
+                const response = await fetch(`/teacher/deletediary?${params.toString()}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('Diary entry deleted', 'success');
+                    loadDiaries();
+                } else {
+                    showMessage(data.message || 'Failed to delete entry', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ===================== STUDENT INFO LOOKUP =====================
+
+        async function lookupStudent() {
+            const studentid = document.getElementById('lookupStudentID').value;
+            const resultDiv = document.getElementById('studentInfoResult');
+
+            if (!studentid) {
+                showMessage('Enter a Student ID', 'error');
+                return;
+            }
+
+            resultDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`/studentinfo?studentid=${studentid}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    const s = data.student;
+                    resultDiv.innerHTML = `
+                        <div class="result-box">
+                            <p><strong>Name:</strong> ${s.Name}</p>
+                            <p><strong>Class:</strong> ${s.ClassID}</p>
+                            <p><strong>Gender:</strong> ${s.Gender}</p>
+                            <p><strong>DOB:</strong> ${s.DOB}</p>
+                            <p><strong>Student Phone:</strong> ${s.StudentPhone || 'N/A'}</p>
+                            <p><strong>Parent Name:</strong> ${s.ParentName || 'N/A'}</p>
+                            <p><strong>Parent Phone:</strong> ${s.ParentPhone || 'N/A'}</p>
+                            <p><strong>Status:</strong> ${s.IsActive ? 'Active' : 'Inactive'}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color:#f44336; padding: 10px 0;">${data.message}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:#f44336;">Error: ${error.message}</p>`;
+            }
+        }
+
+        // ===================== MODAL + MISC =====================
+
+        function openEditModal() {
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function openAttendanceModal() {
+            document.getElementById('attendanceModal').classList.add('show');
+            document.getElementById('attClass').value = '';
+            document.getElementById('attendanceListContainer').innerHTML =
+                '<p style="text-align:center; color:#666; padding: 20px;">Select a class and date to load students</p>';
+            document.getElementById('attendanceSubmitRow').style.display = 'none';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attDate').value = today;
+        }
+
+        function openCheckAttendanceModal() {
+            document.getElementById('checkAttendanceModal').classList.add('show');
+            document.getElementById('checkStudentID').value = '';
+            document.getElementById('checkAttendanceResult').innerHTML = '';
+            document.getElementById('editAttendanceSection').style.display = 'none';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkDate').value = today;
+            lastCheckedStudentId = null;
+            lastCheckedDate = null;
+        }
+
+        function openStudentInfoModal() {
+            document.getElementById('studentInfoModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function showMessage(message, type) {
+            const msgDiv = document.getElementById('messageDiv');
+            msgDiv.textContent = message;
+            msgDiv.className = `message show ${type}`;
+            setTimeout(() => {
+                msgDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        async function logout() {
+            window.location.href = '/';
+        }
+
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const attendanceModal = document.getElementById('attendanceModal');
+            const checkAttendanceModal = document.getElementById('checkAttendanceModal');
+            const monthlyAttendanceModal = document.getElementById('monthlyAttendanceModal');
+            const diaryModal = document.getElementById('diaryModal');
+            const studentInfoModal = document.getElementById('studentInfoModal');
+
+            if (event.target === editModal) closeModal('editModal');
+            if (event.target === attendanceModal) closeModal('attendanceModal');
+            if (event.target === checkAttendanceModal) closeModal('checkAttendanceModal');
+            if (event.target === monthlyAttendanceModal) closeModal('monthlyAttendanceModal');
+            if (event.target === diaryModal) closeModal('diaryModal');
+            if (event.target === studentInfoModal) closeModal('studentInfoModal');
+        }
+    </script>
+</body>
+</html>

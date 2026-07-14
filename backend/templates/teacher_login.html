@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School MIS - Teacher Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            cursor: pointer;
+            color: #667eea;
+            font-size: 18px;
+            background: none;
+            border: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="header">
+                <div class="logo">👨‍🏫</div>
+                <h1>School MIS</h1>
+                <p>Teacher Portal Login</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="teacherid">Teacher ID</label>
+                    <input type="text" id="teacherid" placeholder="Enter your Teacher ID" required autocomplete="username">
+                </div>
+
+                <div class="form-group password-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+
+                <div id="messageBox" class="message"></div>
+            </form>
+
+            <div class="footer">
+                <p>🔒 Teacher access only</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggle = document.querySelector('.password-toggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+
+        function showMessage(message, type) {
+            const box = document.getElementById('messageBox');
+            box.textContent = message;
+            box.className = `message ${type}`;
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const teacherid = document.getElementById('teacherid').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!teacherid || !password) {
+                showMessage('Please enter both Teacher ID and password', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+
+            try {
+                const response = await fetch(`/teacher/loginCheck?teacherid=${encodeURIComponent(teacherid)}&password=${encodeURIComponent(password)}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    showMessage('✓ ' + data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = '/teacher/dashboard';
+                    }, 1000);
+                } else {
+                    showMessage('✗ ' + data.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Login';
+                }
+            } catch (error) {
+                showMessage('Connection error: ' + error.message, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>

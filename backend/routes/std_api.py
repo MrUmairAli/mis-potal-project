@@ -126,7 +126,6 @@ def first_results(request: Request, classid: int):
     results = std_logic.getfirsttermresults(student_id, classid)
     return {"status": "ok", "results": results}
 
-
 @app.get("/subjectresults")
 def subject_results(request: Request, subject: str, classid: int):
     student_id = request.session.get("student_id")
@@ -136,6 +135,38 @@ def subject_results(request: Request, subject: str, classid: int):
     return {"status": "ok", "results": results}
 
 
+
+@app.get("/diary")
+def getdiary(request:Request , classId:int):
+    student_id = request.session.get("student_id")
+    if not student_id:
+        return {"status": "error", "message": "Not logged in"}
+    result=std_logic.getdiary(classId)
+    return {"status":"ok","result":result}
+
+@app.get("/diaryofsubject")
+def diaryofsubject(request:Request , classID:int ,subjectID:int):
+    student_id = request.session.get("student_id")
+    if not student_id:
+        return {"status": "error", "message": "Not logged in"}
+    result=std_logic.getsubjectdiary(classID,subjectID)
+    return {"status":"ok","result":result}
+
+@app.get("/diaryoftime")
+def diaryoftime(request:Request,classid:int,date1:str,date2:str):
+    student_id = request.session.get("student_id")
+    if not student_id:
+        return {"status": "error", "message": "Not logged in"}
+    result=std_logic.getdiaryoftime(classid,date1,date2)
+    return {"status":"ok","result":result}
+
+@app.get("/subjects")
+def getsubjects(request:Request):
+    student_id = request.session.get("student_id")
+    if not student_id:
+        return {"status": "error", "message": "Not logged in"}
+    result=std_logic.getsubject()
+    return {"status":"ok","result":result}
 
 @app.get("/logout")
 def logout(request: Request):

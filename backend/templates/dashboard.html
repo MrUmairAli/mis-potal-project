@@ -152,6 +152,15 @@
             color: white;
         }
 
+        .box-diary {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .box-diary h3, .box-diary p {
+            color: white;
+        }
+
         .box-results {
             background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             color: white;
@@ -364,6 +373,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .view-btn {
@@ -518,6 +528,51 @@
             margin-bottom: 10px;
         }
 
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .diary-entry {
+            background-color: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .diary-date {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .diary-subject {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .diary-teacher {
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .diary-content {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
         @media (max-width: 768px) {
             .student-info {
                 flex-direction: column;
@@ -621,6 +676,12 @@
                 <div class="box-icon">💰</div>
                 <h3>Fees</h3>
                 <p>View fee details and payments</p>
+            </div>
+
+            <div class="box box-diary" onclick="openModal('diary')">
+                <div class="box-icon">📖</div>
+                <h3>Class Diary</h3>
+                <p>View class notes and content</p>
             </div>
 
             <div class="box box-results" onclick="openModal('results')">
@@ -795,9 +856,57 @@
         </div>
     </div>
 
+    <!-- Diary Modal -->
+    <div id="diaryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📖 Class Diary</h2>
+                <button class="close-btn" onclick="closeModal('diary')">&times;</button>
+            </div>
+
+            <div class="view-selector">
+                <button class="view-btn active" onclick="switchDiaryView('allClass', this)">All Classes</button>
+                <button class="view-btn" onclick="switchDiaryView('subject', this)">By Subject</button>
+                <button class="view-btn" onclick="switchDiaryView('dateRange', this)">By Date</button>
+            </div>
+
+            <div id="allClassView" class="view-section active">
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="loadAllClassDiary()">Load Diary</button>
+            </div>
+
+            <div id="subjectView" class="view-section">
+                <div class="form-group">
+                    <label for="diarySubject">Select Subject:</label>
+                    <select id="diarySubject">
+                        <option value="">-- Choose Subject --</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="loadSubjectDiary()">Load Diary</button>
+            </div>
+
+            <div id="dateRangeView" class="view-section">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label for="diaryStartDate">Start Date:</label>
+                        <input type="date" id="diaryStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="diaryEndDate">End Date:</label>
+                        <input type="date" id="diaryEndDate">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="loadDateRangeDiary()">Load Diary</button>
+            </div>
+
+            <div id="diaryEntriesContent" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
     <script>
         let currentStudent = null;
         let currentView = 'daily';
+        let subjects = [];
+        let subjectsLoaded = false;
 
         window.addEventListener('load', async () => {
             await loadStudentInfo();
@@ -855,6 +964,11 @@
                 loadFeesContent();
             } else if (type === 'results') {
                 resetResultsSelector();
+            } else if (type === 'diary') {
+                resetDiaryModal();
+                if (!subjectsLoaded) {
+                    loadSubjects();
+                }
             }
         }
 
@@ -875,7 +989,7 @@
             currentView = view;
             const dailyView = document.getElementById('dailyView');
             const monthlyView = document.getElementById('monthlyView');
-            const buttons = document.querySelectorAll('.view-btn');
+            const buttons = document.querySelectorAll('#attendanceModal .view-btn');
 
             buttons.forEach(btn => btn.classList.remove('active'));
 
@@ -1336,7 +1450,7 @@
 
             let tableRows = rows.map(r => `
                 <tr>
-                    <td>${r.SubjectName}</td>
+                    <td>${r.SubjectID}</td>
                     <td>${r.Marks}</td>
                     <td>${r.totalMarks !== undefined ? r.totalMarks : 'N/A'}</td>
                 </tr>
@@ -1467,6 +1581,151 @@
             `;
         }
 
+        // ===================== CLASS DIARY =====================
+
+        function resetDiaryModal() {
+            document.getElementById('diaryEntriesContent').innerHTML = '';
+            document.getElementById('diaryStartDate').value = '';
+            document.getElementById('diaryEndDate').value = '';
+            document.querySelectorAll('#diaryModal .view-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#diaryModal .view-btn').classList.add('active');
+            document.getElementById('allClassView').classList.add('active');
+            document.getElementById('subjectView').classList.remove('active');
+            document.getElementById('dateRangeView').classList.remove('active');
+        }
+
+        async function loadSubjects() {
+            try {
+                const response = await fetch('/subjects');
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    subjects = data.result;
+                    subjectsLoaded = true;
+                    const select = document.getElementById('diarySubject');
+                    select.innerHTML = '<option value="">-- Choose Subject --</option>';
+                    subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.SubjectID;
+                        option.textContent = subject.SubjectName;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading subjects:', error);
+            }
+        }
+
+        function switchDiaryView(view, button) {
+            document.getElementById('allClassView').classList.remove('active');
+            document.getElementById('subjectView').classList.remove('active');
+            document.getElementById('dateRangeView').classList.remove('active');
+
+            if (view === 'allClass') {
+                document.getElementById('allClassView').classList.add('active');
+            } else if (view === 'subject') {
+                document.getElementById('subjectView').classList.add('active');
+            } else {
+                document.getElementById('dateRangeView').classList.add('active');
+            }
+
+            document.querySelectorAll('#diaryModal .view-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            document.getElementById('diaryEntriesContent').innerHTML = '';
+        }
+
+        async function loadAllClassDiary() {
+            const content = document.getElementById('diaryEntriesContent');
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch(`/diary?classId=${currentStudent.ClassID}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    renderDiary(data.result);
+                } else {
+                    content.innerHTML = '<div class="no-data">No diary entries found</div>';
+                }
+            } catch (error) {
+                content.innerHTML = '<div class="error-banner">Error loading diary</div>';
+            }
+        }
+
+        async function loadSubjectDiary() {
+            const subjectID = document.getElementById('diarySubject').value;
+            if (!subjectID) {
+                showMessage('Please select a subject', 'error');
+                return;
+            }
+
+            const content = document.getElementById('diaryEntriesContent');
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch(`/diaryofsubject?classID=${currentStudent.ClassID}&subjectID=${subjectID}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    renderDiary(data.result);
+                } else {
+                    content.innerHTML = '<div class="no-data">No diary entries found</div>';
+                }
+            } catch (error) {
+                content.innerHTML = '<div class="error-banner">Error loading diary</div>';
+            }
+        }
+
+        async function loadDateRangeDiary() {
+            const date1 = document.getElementById('diaryStartDate').value;
+            const date2 = document.getElementById('diaryEndDate').value;
+
+            if (!date1 || !date2) {
+                showMessage('Please select both dates', 'error');
+                return;
+            }
+
+            const content = document.getElementById('diaryEntriesContent');
+            content.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch(`/diaryoftime?classid=${currentStudent.ClassID}&date1=${date1}&date2=${date2}`);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    renderDiary(data.result);
+                } else {
+                    content.innerHTML = '<div class="no-data">No diary entries found</div>';
+                }
+            } catch (error) {
+                content.innerHTML = '<div class="error-banner">Error loading diary</div>';
+            }
+        }
+
+        function renderDiary(entries) {
+            const content = document.getElementById('diaryEntriesContent');
+            if (!entries || entries.length === 0) {
+                content.innerHTML = '<div class="no-data">No diary entries found</div>';
+                return;
+            }
+
+            let html = '';
+            entries.forEach(entry => {
+                const date = new Date(entry.Date).toLocaleDateString();
+                html += `
+                    <div class="diary-entry">
+                        <div class="diary-date">📅 ${date}</div>
+                        <div class="diary-subject">${entry.SubjectName || 'General'}</div>
+                        <div class="diary-teacher">by ${entry.TeacherName || 'Teacher'}</div>
+                        <div class="diary-content">${entry.DiaryContent}</div>
+                    </div>
+                `;
+            });
+            content.innerHTML = html;
+        }
+
+        // ===================== LOGOUT / MODAL CLOSE =====================
+
         async function logout() {
             try {
                 await fetch('/logout');
@@ -1477,7 +1736,7 @@
         }
 
         window.onclick = function(event) {
-            ['infoModal', 'attendanceModal', 'feesModal', 'resultsModal'].forEach(modalId => {
+            ['infoModal', 'attendanceModal', 'feesModal', 'resultsModal', 'diaryModal'].forEach(modalId => {
                 const modal = document.getElementById(modalId);
                 if (event.target === modal) {
                     modal.style.display = 'none';
