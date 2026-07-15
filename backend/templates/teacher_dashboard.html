@@ -170,6 +170,12 @@
 
         .box-diary h3, .box-diary p { color: white; }
 
+        .box-salary {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .box-salary h3, .box-salary p { color: white; }
+
         .box-studentinfo {
             background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
@@ -490,6 +496,54 @@
             color: #333;
         }
 
+        .view-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .view-btn.active {
+            background-color: #11998e;
+            color: white;
+            border-color: #11998e;
+        }
+
+        .salary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .salary-table th {
+            background-color: #f5f5f5;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .salary-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .status-paid { color: #4CAF50; font-weight: 600; }
+        .status-pending { color: #ff9800; font-weight: 600; }
+
         @media (max-width: 768px) {
             .navbar { flex-direction: column; gap: 15px; }
             .dashboard-boxes { grid-template-columns: 1fr; }
@@ -561,6 +615,12 @@
                 <div class="box-icon">📔</div>
                 <h3>Class Diary</h3>
                 <p>Add, view, edit, or delete diary entries</p>
+            </div>
+
+            <div class="box box-salary" onclick="openSalaryModal()">
+                <div class="box-icon">💵</div>
+                <h3>My Salary</h3>
+                <p>View your full salary record, filter by month or year</p>
             </div>
 
             <div class="box box-studentinfo" onclick="openStudentInfoModal()">
@@ -787,6 +847,47 @@
         </div>
     </div>
 
+    <!-- Salary Modal -->
+    <div class="modal" id="salaryModal">
+        <div class="modal-content" style="max-width: 750px;">
+            <div class="modal-header">
+                <h2>My Salary</h2>
+                <button class="close-btn" onclick="closeModal('salaryModal')">&times;</button>
+            </div>
+
+            <div class="view-selector">
+                <button class="view-btn active" onclick="switchSalaryView('all', this)">All Records</button>
+                <button class="view-btn" onclick="switchSalaryView('monthly', this)">By Month</button>
+                <button class="view-btn" onclick="switchSalaryView('yearly', this)">By Year</button>
+            </div>
+
+            <div id="salaryMonthFilter" class="form-group" style="display:none;">
+                <label for="salaryMonth">Month</label>
+                <select id="salaryMonth" onchange="loadSalary()">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+
+            <div id="salaryYearFilter" class="form-group" style="display:none;">
+                <label for="salaryYear">Year</label>
+                <input type="number" id="salaryYear" min="2020" max="2099" onchange="loadSalary()">
+            </div>
+
+            <div id="salaryResult" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
     <!-- Student Info Modal -->
     <div class="modal" id="studentInfoModal">
         <div class="modal-content">
@@ -809,6 +910,7 @@
         let lastCheckedStudentId = null;
         let lastCheckedDate = null;
         let currentEditDiaryId = null;
+        let currentSalaryView = 'all';
 
         window.addEventListener('load', async () => {
             await loadTeacherInfo();
@@ -823,7 +925,7 @@
                     currentTeacher = data.teacher;
                     document.getElementById('teacherName').textContent = currentTeacher.TeacherName;
                     document.getElementById('teacherID').textContent = currentTeacher.TeacherID;
-                    document.getElementById('teacherSubject').textContent = currentTeacher.SubjectName || '-';
+                    document.getElementById('teacherSubject').textContent = currentTeacher.SubjectID|| '-';
                     document.getElementById('teacherEmail').textContent = currentTeacher.Email;
                     document.getElementById('teacherPhone').textContent = currentTeacher.Phone;
                     document.getElementById('teacherExp').textContent = (currentTeacher.Experience || 0) + ' years';
@@ -1358,6 +1460,125 @@
             }
         }
 
+        // ===================== SALARY =====================
+
+        function openSalaryModal() {
+            document.getElementById('salaryModal').classList.add('show');
+            document.querySelectorAll('#salaryModal .view-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#salaryModal .view-btn').classList.add('active');
+            document.getElementById('salaryMonthFilter').style.display = 'none';
+            document.getElementById('salaryYearFilter').style.display = 'none';
+            currentSalaryView = 'all';
+            const today = new Date();
+            document.getElementById('salaryMonth').value = today.getMonth() + 1;
+            document.getElementById('salaryYear').value = today.getFullYear();
+            loadSalary();
+        }
+
+        function switchSalaryView(view, button) {
+            currentSalaryView = view;
+            document.querySelectorAll('#salaryModal .view-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            document.getElementById('salaryMonthFilter').style.display = (view === 'monthly') ? 'block' : 'none';
+            document.getElementById('salaryYearFilter').style.display = (view === 'yearly') ? 'block' : 'none';
+
+            loadSalary();
+        }
+
+        async function loadSalary() {
+            const resultDiv = document.getElementById('salaryResult');
+            resultDiv.innerHTML = '<p style="text-align:center; padding: 15px; color:#666;">Loading...</p>';
+
+            let url;
+            if (currentSalaryView === 'all') {
+                url = '/teacher/salary';
+            } else if (currentSalaryView === 'monthly') {
+                const month = document.getElementById('salaryMonth').value;
+                url = `/teacher/monthlysalary?month=${month}`;
+            } else {
+                const year = document.getElementById('salaryYear').value;
+                if (!year) {
+                    resultDiv.innerHTML = '<p style="text-align:center; color:#666; padding: 20px;">Enter a year</p>';
+                    return;
+                }
+                url = `/teacher/yearlysalary?year=${year}`;
+            }
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status !== 'ok' || !data.salary || data.salary.length === 0) {
+                    resultDiv.innerHTML = '<p style="text-align:center; color:#666; padding: 20px;">No salary records found</p>';
+                    return;
+                }
+
+                renderSalary(data.salary);
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:#f44336; padding: 10px 0;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderSalary(records) {
+            const resultDiv = document.getElementById('salaryResult');
+            const monthNames = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+                                 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let totalNet = 0;
+
+            let rows = records.map(r => {
+                const base = parseFloat(r.BaseSalary || 0);
+                const allowance = parseFloat(r.Allowance || 0);
+                const deduction = parseFloat(r.Deduction || 0);
+                const net = parseFloat(r.NetSalary || (base + allowance - deduction));
+                totalNet += net;
+
+                const statusClass = r.Status === 'Paid' ? 'status-paid' : 'status-pending';
+
+                return `
+                    <tr>
+                        <td>${monthNames[r.Month] || r.Month}</td>
+                        <td>${r.Year}</td>
+                        <td>${base.toFixed(2)}</td>
+                        <td>${allowance.toFixed(2)}</td>
+                        <td>${deduction.toFixed(2)}</td>
+                        <td><strong>${net.toFixed(2)}</strong></td>
+                        <td><span class="${statusClass}">${r.PaymentStatus}</span></td>
+                        <td>${r.PaymentDate || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            resultDiv.innerHTML = `
+                <table class="salary-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Base</th>
+                            <th>Allowance</th>
+                            <th>Deduction</th>
+                            <th>Net</th>
+                            <th>Status</th>
+                            <th>Paid Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                <div class="attendance-summary">
+                    <div class="stat-box">
+                        <div class="stat-number">${totalNet.toFixed(2)}</div>
+                        <div class="stat-label">Total Net</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${records.length}</div>
+                        <div class="stat-label">Records</div>
+                    </div>
+                </div>
+            `;
+        }
+
         // ===================== STUDENT INFO LOOKUP =====================
 
         async function lookupStudent() {
@@ -1451,6 +1672,7 @@
             const checkAttendanceModal = document.getElementById('checkAttendanceModal');
             const monthlyAttendanceModal = document.getElementById('monthlyAttendanceModal');
             const diaryModal = document.getElementById('diaryModal');
+            const salaryModal = document.getElementById('salaryModal');
             const studentInfoModal = document.getElementById('studentInfoModal');
 
             if (event.target === editModal) closeModal('editModal');
@@ -1458,6 +1680,7 @@
             if (event.target === checkAttendanceModal) closeModal('checkAttendanceModal');
             if (event.target === monthlyAttendanceModal) closeModal('monthlyAttendanceModal');
             if (event.target === diaryModal) closeModal('diaryModal');
+            if (event.target === salaryModal) closeModal('salaryModal');
             if (event.target === studentInfoModal) closeModal('studentInfoModal');
         }
     </script>

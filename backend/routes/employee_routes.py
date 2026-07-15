@@ -5,10 +5,8 @@ from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from mis.backend.logic  import  std_logic, teacher_logic ,employee
-
-
 from starlette.middleware.sessions import SessionMiddleware
-#          python3.13 -m uvicorn mis.backend.routes.teacher_api:app --reload
+#          python3.13 -m uvicorn mis.backend.routes.employee_routes:app --reload
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="replace-with-a-real-secret")
 templates = Jinja2Templates(directory="mis/backend/templates")
@@ -39,8 +37,8 @@ def setDAshboard(request :Request):
         context={}
     )
 
-@app.get("/teacher/info")
-def getteacherdata(request: Request):
+@app.get("/employee/info")
+def getemployeedata(request: Request):
     employee_id = request.session.get("Employee_id")
     if not employee_id:
         return {"status": "error", "message": "Not logged in"}
@@ -51,7 +49,7 @@ def getteacherdata(request: Request):
 
 
 @app.post("/changeinfo")
-def getteacherdata(request: Request , email:str ,phone:str ,dob:str ,address:str):
+def getemployeedata(request: Request , email:str ,phone:str ,dob:str ,address:str):
     employee_id = request.session.get("Employee_id")
     if not employee_id:
         return {"status": "error", "message": "Not logged in"}
@@ -64,7 +62,7 @@ def get_salary(request: Request):
     Employee_id = request.session.get("Employee_id")
     if not Employee_id:
         return {"status": "error", "message": "Not logged in"}
-    result=employeemployee.salary(Employee_id)
+    result=employee.salary(Employee_id)
     if not result:
         return {"status": "error", "message": "No salary found"}
     return {"status": "ok", "salary": result}

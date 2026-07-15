@@ -201,12 +201,12 @@ def get_monthlysalary(request: Request, month :int):
 
 
 @app.get("/teacher/yearlysalary")
-def get_yearlysalary(request: Request, month :int , year :int ):
+def get_yearlysalary(request: Request, year:int ):
     teacher_id = request.session.get("teacher_id")
     if not teacher_id:
         return {"status": "error", "message": "Not logged in"}
-    result=teacher_logic.getyearlysalary(teacher_id,month ,year)
-    if not result:
+    result=teacher_logic.getyearlysalary(teacher_id,year)
+    if result is None:
         return {"status": "error", "message": "No salary found"}
     return {"status": "ok", "salary": result}
 

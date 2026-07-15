@@ -6,7 +6,9 @@ def login ( employeeId:int , employeepass:str):
                    (employeeId,employeepass))
     result = cursor.fetchone()
     db.close()
-    return result["EmployeeID"]
+    if result is not None:
+         return result["EmployeeID"]
+    return result
 
 def get_info(id:int):
     db=std_logic.get_db ()

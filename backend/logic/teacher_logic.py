@@ -27,6 +27,10 @@ def getteacherdata(teacherid:int):
 
     result = cursor.fetchone()
     db.close()
+    su=getsubject()
+    for s in su:
+        if s["SubjectID"]==result["SubjectID"]:
+            result["SubjectID"]=s["SubjectName"]
     return result
     
 
@@ -178,7 +182,7 @@ def getyearlysalary ( teacherid : int , year : int):
     db = std_logic.get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute(
-       " select * from TeacherSalary where TeacherID =%s Year =%s",(teacherid,year,)
+       " select * from TeacherSalary where TeacherID =%s  and Year =%s",(teacherid,year,)
     )
     result =cursor.fetchall()
     db.close()

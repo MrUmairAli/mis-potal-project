@@ -253,18 +253,7 @@ def getsubject( ):
     cursor.execute("select SubjectID ,SubjectName  from subjects")
     result =cursor.fetchall()
 
-    te=getteacher()
-    se=getsubject()
-
-    for record in result :
-        for  t in te :
-            if record ["TeacherID"]==t["TeacherID"]:
-                record["TeacherID"]=t["TeacherName"]
-    for record in result:
-        for s in se:
-            if record ["SubjectID"]==s["SubjectID"]:
-                record["SubjectID"]=s["SubjectName"]
-    db.close()
+  
     return result
 
 def getteacher():
